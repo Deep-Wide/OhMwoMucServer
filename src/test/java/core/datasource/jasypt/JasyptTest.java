@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestPropertySource( properties = { "jasypt.encryptor.password=Happy1234@@" })
+@TestPropertySource( properties = { "jasypt.encryptor.password=popo4508##" })
 @Slf4j
 @SpringBootTest(classes = JasyptConfig.class)
 public class JasyptTest {

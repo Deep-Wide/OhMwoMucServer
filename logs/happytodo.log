@@ -255,3 +255,39 @@ Caused by: java.io.FileNotFoundException: class path resource [mybatis/] cannot 
 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:146)
 	... 20 common frames omitted
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - Starting JasyptTest using Java 17.0.11 with PID 86214 (started by bean in /Users/bean/Development/OhMwoMuk/OhMwoMucServer)
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - No active profile set, falling back to 1 default profile: "default"
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - Started JasyptTest in 0.284 seconds (process running for 0.852)
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - key: driverNm
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - encryptText: mTMuDlEgv9s+2QTqCGGIc/pwPdg5DsRTUC3Bi0TTM07TbkR53YyoDw0rHu3kyWrK
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - decryptText: com.mysql.cj.jdbc.Driver
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - key: userNm
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - encryptText: sKHNnnXUsHaey7HmUkowMvYqItqamwlE
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - decryptText: bean
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - key: jdbcUrl
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - encryptText: bU7yzOurSel7sIU4Jm/VjOA318ofL4BJ8kqTIm0GtAP+oOJbkMNYufzKmbaeSN8+oTI7xuW7qs0=
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - decryptText: jdbc:mysql://192.168.0.3:3306/ohmwomuc
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - key: userPw
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - encryptText: HNX8xE4rV2fvwfiywvpWzu+B3emtPnqzo91pLD5VuQg=
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - decryptText: Rudals4508!
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - key: cryptoKey
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - encryptText: xRVn5F21xglmHAqAs7t/DzYgFPFjJlxityctoaS/RHc=
+2024-11-27 18:14:11 INFO  core.datasource.jasypt.JasyptTest - decryptText: flskdlqjstm
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - Starting JasyptTest using Java 17.0.11 with PID 86356 (started by bean in /Users/bean/Development/OhMwoMuk/OhMwoMucServer)
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - No active profile set, falling back to 1 default profile: "default"
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - Started JasyptTest in 0.275 seconds (process running for 0.75)
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - key: driverNm
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - encryptText: vjTmzDoub76weQc/GROkn2LJGM2ROU2JvAzq8OBhRFwugdUv2HVSW+zAB00M1rAN
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - decryptText: com.mysql.cj.jdbc.Driver
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - key: userNm
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - encryptText: T6CwtbRmRuZnpYMkOBZ10w5ElaXixIiU
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - decryptText: bean
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - key: jdbcUrl
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - encryptText: HwIkKmsKOpgbNuGscDyr0LALwljs/oVMCMXsW1aJ5rYpGCUDFKSk+RMWq3/8en//M2OZO8v8xoE=
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - decryptText: jdbc:mysql://192.168.0.3:3306/ohmwomuc
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - key: userPw
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - encryptText: +jooh0DUmgg5jWXGkz6wcUrBL9jOyxE8Ea5YdoXOZBM=
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - decryptText: Rudals4508!
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - key: cryptoKey
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - encryptText: EUoLXFtaJePNpO9kPtvmMPc5Y9nz5cvzBlGj63E/Q24=
+2024-11-27 18:17:44 INFO  core.datasource.jasypt.JasyptTest - decryptText: flskdlqjstm

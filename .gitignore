@@ -43,3 +43,6 @@ bin/
 
 ### Jasypt ###
 /src/test/**/jasypt/
+
+### logs ###
+/logs/

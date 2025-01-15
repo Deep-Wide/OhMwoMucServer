@@ -1,5 +1,6 @@
 package net.ohmwomuc.core.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import net.ohmwomuc.core.exception.CustomExceptionHandler;
 import net.ohmwomuc.core.security.authentication.CustomAuthenticationProvider;
 import net.ohmwomuc.core.security.filter.CustomEmailPasswordAuthenticationFilter;
@@ -14,12 +15,14 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.ohmwomuc.core.exception.CustomExceptionCode.USER_FORBIDDEN;
@@ -29,9 +32,14 @@ import static net.ohmwomuc.core.exception.CustomExceptionCode.USER_UNAUTHORIZED;
 @EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
+    private final List<String> allowedRequestUrlList = List.of(
+            "/api/security/login",
+            "/api/security/login-user"
+    );
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/security/login")
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(allowedRequestUrlList.toArray(String[]::new))
                         .permitAll()
                         .anyRequest()
                         .authenticated())
@@ -41,9 +49,20 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(configurationSource()))
                 .addFilterBefore(new CustomEmailPasswordAuthenticationFilter(authenticationManager, securityContextRepository), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex.accessDeniedHandler(getAccessDeniedHandler())
-                        .authenticationEntryPoint(getAuthenticationEntryPoint()));
+                        .authenticationEntryPoint(getAuthenticationEntryPoint()))
+                .logout(logout -> logout.logoutUrl("/api/security/logout")
+                        .logoutSuccessHandler(getLogoutSuccessHandler())
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID"));
 
         return http.build();
+    }
+
+    private LogoutSuccessHandler getLogoutSuccessHandler() {
+        return (((request, response, authentication) -> {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().flush();
+        }));
     }
 
     private CorsConfigurationSource configurationSource() {
@@ -61,16 +80,16 @@ public class SecurityConfig {
     }
 
     private AuthenticationEntryPoint getAuthenticationEntryPoint() {
-        // 인증 X API 접근 (403 forbidden)
+        // 인증 X API 접근 (401 authorization)
         return (request, response, authentication) -> {
-            CustomExceptionHandler.writeSecurityExceptionResponse(response, USER_FORBIDDEN);
+            CustomExceptionHandler.writeSecurityExceptionResponse(response, USER_UNAUTHORIZED);
         };
     }
 
     private AccessDeniedHandler getAccessDeniedHandler() {
-        // 인증 O 인가 X API 접근 (401 authorization)
+        // 인증 O 인가 X API 접근 (403 forbidden)
         return (request, response, authentication) -> {
-            CustomExceptionHandler.writeSecurityExceptionResponse(response, USER_UNAUTHORIZED);
+            CustomExceptionHandler.writeSecurityExceptionResponse(response, USER_FORBIDDEN);
         };
     }
 

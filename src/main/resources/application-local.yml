@@ -9,4 +9,4 @@ spring:
 
 server:
   log:
-    path: logs\
+    path: /Users/bean/Development/OhMwoMuk/OhMwoMucServer/logs

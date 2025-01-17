@@ -20,6 +20,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @PostConstruct
     public void initUser() {
         userDB.put("popo@naver.com", User.UserAccountInfo.builder()
+                .id(3)
                 .email("popo@naver.com")
                 .nickname("포포")
                 .password("1q2w3e4r")
@@ -27,6 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 .build());
 
         userDB.put("qwqw@google.com", User.UserAccountInfo.builder()
+                .id(7)
                 .email("qwqw@google.com")
                 .nickname("관리자")
                 .password("qawsedrf")

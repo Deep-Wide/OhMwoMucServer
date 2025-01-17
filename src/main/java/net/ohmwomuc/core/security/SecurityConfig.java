@@ -29,12 +29,15 @@ import static net.ohmwomuc.core.exception.CustomExceptionCode.USER_FORBIDDEN;
 import static net.ohmwomuc.core.exception.CustomExceptionCode.USER_UNAUTHORIZED;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class SecurityConfig {
 
     private final List<String> allowedRequestUrlList = List.of(
             "/api/security/login",
-            "/api/security/login-user"
+            "/api/security/login-user",
+            "/api/muamuc",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     );
 
     @Bean

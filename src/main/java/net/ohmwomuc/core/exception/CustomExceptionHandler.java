@@ -26,6 +26,8 @@ public class CustomExceptionHandler {
                                                                      HandlerMethod handlerMethod,
                                                                      HttpServletRequest request) {
 
+        e.printStackTrace();
+
         if (e instanceof CustomException) {
             CustomException customException = (CustomException) e;
             CustomExceptionCode customExceptionCode = customException.getCustomExceptionCode();

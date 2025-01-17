@@ -13,6 +13,7 @@ public class User {
     @AllArgsConstructor
     @Builder
     public static class Principal {
+        private int id;
         private String email;
         private String nickname;
         private Set<GrantedAuthority> role;
@@ -34,6 +35,7 @@ public class User {
     @AllArgsConstructor
     @Builder
     public static class UserAccountInfo {
+        private int id;
         private String email;
         private String password;
         private String nickname;

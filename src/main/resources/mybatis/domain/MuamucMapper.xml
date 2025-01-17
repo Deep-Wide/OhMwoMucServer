@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.ohmwomuc.domain.muamuc.repository.MuamucMapper">
-    <select id="findAllDomain" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Condition" resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
+    <select id="findAllDomain" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Condition"
+            resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
         SELECT *
         FROM MUAMUC muamuc
         WHERE muamuc.tag_id = #{id}
@@ -11,49 +12,60 @@
         </if>
     </select>
 
-<!--    <select id="findAllDomain" parameterType="net.todo.domain.todo.dto.Todo$Condition" resultType="net.todo.domain.todo.dto.Todo$Domain">-->
-<!--        <include refid="findDomain"></include>-->
-<!--        <if test="status != null ">-->
-<!--            and status = #{status}-->
-<!--        </if>-->
-<!--        <if test="userId != null ">-->
-<!--            and user_id = #{userId}-->
-<!--        </if>-->
-<!--    </select>-->
+    <insert id="createMuamuc" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$DomainRequest"
+            useGeneratedKeys="true"
+            keyProperty="muamucId">
+        insert into MUAMUC
+            (tag_id, title, content, writer_id)
+        VALUES (#{tagId}, #{title}, #{content}, #{writerId})
+    </insert>
 
-<!--    <select id="findDomainById" parameterType="int" resultType="net.todo.domain.todo.dto.Todo$Domain">-->
-<!--        <include refid="findDomain"></include>-->
-<!--        and dmn.id = #{id}-->
-<!--    </select>-->
+    <select id="findDomainById" parameterType="int" resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
+        <!--        <include refid="findAllDomain"></include>-->
+        SELECT *
+        FROM MUAMUC muamuc
+        where muamuc.muamuc_id = #{id}
+    </select>
 
-<!--    <insert id="persistDomain" parameterType="net.todo.domain.todo.dto.Todo$Domain"-->
-<!--            useGeneratedKeys="true"-->
-<!--            keyProperty="id">-->
-<!--        insert into todo_domain(user_id, title, content, status)-->
-<!--        values (#{userId}, #{title}, #{content}, 0)-->
-<!--    </insert>-->
+    <!--    <select id="findAllDomain" parameterType="net.todo.domain.todo.dto.Todo$Condition" resultType="net.todo.domain.todo.dto.Todo$Domain">-->
+    <!--        <include refid="findDomain"></include>-->
+    <!--        <if test="status != null ">-->
+    <!--            and status = #{status}-->
+    <!--        </if>-->
+    <!--        <if test="userId != null ">-->
+    <!--            and user_id = #{userId}-->
+    <!--        </if>-->
+    <!--    </select>-->
 
-<!--    <update id="updateDomain" parameterType="net.todo.domain.todo.dto.Todo$Domain">-->
-<!--        update todo_domain-->
-<!--        SET title     = #{title},-->
-<!--            content   = #{content},-->
-<!--            status    = #{statusCode},-->
-<!--            update_dt = now()-->
-<!--        WHERE id = #{id};-->
-<!--    </update>-->
 
-<!--    <delete id="deleteDomain" parameterType="int">-->
-<!--        update todo_domain-->
-<!--        SET is_del    = 1,-->
-<!--            delete_dt = now()-->
-<!--        WHERE id = #{id}-->
-<!--    </delete>-->
+    <!--    <insert id="persistDomain" parameterType="net.todo.domain.todo.dto.Todo$Domain"-->
+    <!--            useGeneratedKeys="true"-->
+    <!--            keyProperty="id">-->
+    <!--        insert into todo_domain(user_id, title, content, status)-->
+    <!--        values (#{userId}, #{title}, #{content}, 0)-->
+    <!--    </insert>-->
 
-<!--    <select id="findAllStatus" resultType="net.todo.domain.todo.dto.Todo$Status">-->
-<!--        select-->
-<!--            id,-->
-<!--            description,-->
-<!--            icon-->
-<!--        FROM todo_status-->
-<!--    </select>-->
+    <!--    <update id="updateDomain" parameterType="net.todo.domain.todo.dto.Todo$Domain">-->
+    <!--        update todo_domain-->
+    <!--        SET title     = #{title},-->
+    <!--            content   = #{content},-->
+    <!--            status    = #{statusCode},-->
+    <!--            update_dt = now()-->
+    <!--        WHERE id = #{id};-->
+    <!--    </update>-->
+
+    <!--    <delete id="deleteDomain" parameterType="int">-->
+    <!--        update todo_domain-->
+    <!--        SET is_del    = 1,-->
+    <!--            delete_dt = now()-->
+    <!--        WHERE id = #{id}-->
+    <!--    </delete>-->
+
+    <!--    <select id="findAllStatus" resultType="net.todo.domain.todo.dto.Todo$Status">-->
+    <!--        select-->
+    <!--            id,-->
+    <!--            description,-->
+    <!--            icon-->
+    <!--        FROM todo_status-->
+    <!--    </select>-->
 </mapper>

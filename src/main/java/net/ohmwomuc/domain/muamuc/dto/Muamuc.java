@@ -30,6 +30,10 @@ public class Muamuc {
             this.tag = Tag.getById(tagId).get();
         }
 
+        public int getTagId() {
+            return tag.getId();
+        }
+
         public DomainResponse toResponse() {
             return DomainResponse.builder()
                     .muamuc_id(muamucId)
@@ -88,6 +92,10 @@ public class Muamuc {
         private int restaurant_id;
         @Schema(description = "작성자 ID")
         private int writer_id;
+
+        public void setTagId(int tagId) {
+            this.tag = Tag.getById(tagId).get();
+        }
 
         public Domain toDomain() {
             return Muamuc.Domain.builder()

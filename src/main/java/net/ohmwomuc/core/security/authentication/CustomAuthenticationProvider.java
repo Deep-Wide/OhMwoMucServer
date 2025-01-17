@@ -45,6 +45,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 .filter(account -> account.getPassword().equals(token.getCredentials())) // 인증 정보 확인 앖으면 Optional.empty() 반환
                 .map(account -> CustomAuthenticationToken.builder()
                         .principal(User.Principal.builder()
+                                .id(account.getId())
                                 .email(account.getEmail())
                                 .nickname(account.getNickname())
                                 .role(account.getRole())

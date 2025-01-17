@@ -30,7 +30,7 @@ public class MuamucController {
     @Operation(summary = "Muamuc 게시물 태그별 전체 리스트 조회")
     public ResponseEntity<List<Muamuc.DomainResponse>> getMuamucList(@RequestParam(name = "tag", required = true) Integer tagId, @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
         List<Muamuc.Domain> muamucList = muamucService.getMuamucList(Muamuc.Condition.builder()
-                .tag(net.ohmwomuc.domain.muamuc.dto.Tag.getById(tagId).get())
+                .tag(net.ohmwomuc.domain.muamuc.dto.Tag.getById(tagId).orElse(null))
                 .searchKeyword(searchKeyword)
                 .build());
 

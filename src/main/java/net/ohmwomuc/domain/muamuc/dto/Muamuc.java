@@ -36,14 +36,14 @@ public class Muamuc {
 
         public DomainResponse toResponse() {
             return DomainResponse.builder()
-                    .muamuc_id(muamucId)
+                    .muamucId(muamucId)
                     .tag(tag)
                     .title(title)
                     .content(content)
-                    .restaurant_id(restaurantId)
-                    .writer_id(writerId)
-                    .created_dt(createdAt)
-                    .update_dt(updatedAt)
+                    .restaurantId(restaurantId)
+                    .writerId(writerId)
+                    .createdAt(createdAt)
+                    .updatedAt(updatedAt)
                     .build();
 
         }
@@ -57,7 +57,7 @@ public class Muamuc {
     @Schema(description = "Muamuc 도메인 request")
     public static class DomainResponse {
         @Schema(description = "뭐먹 ID")
-        private int muamuc_id;
+        private int muamucId;
         @Schema(description = "태그")
         private Tag tag;
         @Schema(description = "제목")
@@ -65,13 +65,13 @@ public class Muamuc {
         @Schema(description = "내용")
         private String content;
         @Schema(description = "식당 ID")
-        private int restaurant_id;
+        private int restaurantId;
         @Schema(description = "작성자 ID")
-        private int writer_id;
+        private int writerId;
         @Schema(description = "생성 일시")
-        private LocalDateTime created_dt;
+        private LocalDateTime createdAt;
         @Schema(description = "수정 일시")
-        private LocalDateTime update_dt;
+        private LocalDateTime updatedAt;
     }
 
     @Getter
@@ -81,7 +81,7 @@ public class Muamuc {
     @Schema(description = "Muamuc Request")
     public static class DomainRequest {
         @Schema(description = "뭐먹 ID")
-        private int muamuc_id;
+        private int muamucId;
         @Schema(description = "태그")
         private Tag tag;
         @Schema(description = "제목")
@@ -89,9 +89,9 @@ public class Muamuc {
         @Schema(description = "내용")
         private String content;
         @Schema(description = "식당 ID")
-        private int restaurant_id;
+        private int restaurantId;
         @Schema(description = "작성자 ID")
-        private int writer_id;
+        private int writerId;
 
         public void setTagId(int tagId) {
             this.tag = Tag.getById(tagId).get();
@@ -99,12 +99,12 @@ public class Muamuc {
 
         public Domain toDomain() {
             return Muamuc.Domain.builder()
-                    .muamucId(muamuc_id)
+                    .muamucId(muamucId)
                     .tag(tag)
                     .title(title)
                     .content(content)
-                    .restaurantId(restaurant_id)
-                    .writerId(writer_id)
+                    .restaurantId(restaurantId)
+                    .writerId(writerId)
                     .build();
         }
     }

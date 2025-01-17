@@ -23,7 +23,7 @@ public enum Tag {
 
     public static Optional<Tag> getById(int id) {
         return Arrays.stream(Tag.values())
-                .filter(tag -> tag.getId().equals(id))
+                .filter(tag -> tag.getId() == id)
                 .findAny();
     }
 }

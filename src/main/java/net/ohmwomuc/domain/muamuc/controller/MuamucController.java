@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RequestMapping("/api/muamuc")
 @RestController
@@ -46,5 +47,32 @@ public class MuamucController {
         Muamuc.DomainResponse response = muamucService.addMuamucDomain(muamuc.toDomain()).toResponse();
 
         return ResponseEntity.status(CREATED).body(response);
+    }
+
+    @GetMapping("/{muamucId}")
+    @Operation(summary = "Muamuc 게시물 조회")
+    public ResponseEntity<Muamuc.DomainResponse> getMuamucById(@PathVariable("muamucId") Integer muamucId) {
+        Muamuc.DomainResponse muamuc = muamucService.findById(muamucId).toResponse();
+
+        return ResponseEntity.ok(muamuc);
+    }
+
+    @PostMapping("{muamucId}")
+    @Operation(summary = "Muamuc 게시물 수정")
+    public ResponseEntity<Muamuc.DomainResponse> updateMuamucById(@PathVariable("muamucId") Integer muamucId, @RequestBody Muamuc.DomainRequest muamuc) {
+        if (muamucId != muamuc.getMuamucId()) {
+            throw new CustomException(CustomExceptionCode.NOT_SUPPORTED_CONTENT_TYPE);
+        }
+        Muamuc.DomainResponse updatedMuamuc = muamucService.updateMuamuc(muamuc).toResponse();
+
+        return ResponseEntity.ok(updatedMuamuc);
+    }
+
+    @DeleteMapping("{muamucId}")
+    @Operation(summary = "Muamuc 게시물 삭제")
+    public ResponseEntity<Boolean> deleteMuamucById(@PathVariable("muamucId") Integer muamucId) {
+        muamucService.deleteMuamuc(muamucId);
+
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 }

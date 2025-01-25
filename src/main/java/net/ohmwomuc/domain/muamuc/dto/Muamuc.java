@@ -97,6 +97,10 @@ public class Muamuc {
             this.tag = Tag.getById(tagId).get();
         }
 
+        public int getTagId() {
+            return tag.getId();
+        }
+
         public Domain toDomain() {
             return Muamuc.Domain.builder()
                     .muamucId(muamucId)

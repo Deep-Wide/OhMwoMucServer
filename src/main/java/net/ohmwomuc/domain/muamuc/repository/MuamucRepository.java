@@ -13,8 +13,8 @@ public interface MuamucRepository {
 
     void createMuamuc(Muamuc.Domain muamuc);
 
-    void updateMuamuc(Muamuc.Domain muamuc);
+    void updateMuamuc(Muamuc.DomainRequest muamuc);
 
-    void deleteMuamuc(int id);
+    void deleteMuamuc(Integer id);
 
 }

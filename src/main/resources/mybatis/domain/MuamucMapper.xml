@@ -6,6 +6,7 @@
         SELECT *
         FROM MUAMUC muamuc
         WHERE muamuc.tag_id = #{id}
+        AND is_del = 0
         <if test="searchKeyword != null and searchKeyword != ''">
             AND (muamuc.title LIKE CONCAT('%', #{searchKeyword}, '%')
             OR muamuc.content LIKE CONCAT('%', #{searchKeyword}, '%'))
@@ -27,45 +28,19 @@
         where muamuc.muamuc_id = #{id}
     </select>
 
-    <!--    <select id="findAllDomain" parameterType="net.todo.domain.todo.dto.Todo$Condition" resultType="net.todo.domain.todo.dto.Todo$Domain">-->
-    <!--        <include refid="findDomain"></include>-->
-    <!--        <if test="status != null ">-->
-    <!--            and status = #{status}-->
-    <!--        </if>-->
-    <!--        <if test="userId != null ">-->
-    <!--            and user_id = #{userId}-->
-    <!--        </if>-->
-    <!--    </select>-->
+    <update id="updateMuamuc" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$DomainRequest">
+        update MUAMUC
+        SET title = #{title},
+            tag_id = #{tagId},
+            content = #{content}
+        WHERE muamuc_id = #{muamucId}
+    </update>
 
+    <update id="deleteMuamuc" parameterType="java.lang.Integer">
+        update MUAMUC
+        Set deleted_at = CURRENT_TIMESTAMP,
+            is_del = true
+        Where muamuc_id = #{id}
+    </update>
 
-    <!--    <insert id="persistDomain" parameterType="net.todo.domain.todo.dto.Todo$Domain"-->
-    <!--            useGeneratedKeys="true"-->
-    <!--            keyProperty="id">-->
-    <!--        insert into todo_domain(user_id, title, content, status)-->
-    <!--        values (#{userId}, #{title}, #{content}, 0)-->
-    <!--    </insert>-->
-
-    <!--    <update id="updateDomain" parameterType="net.todo.domain.todo.dto.Todo$Domain">-->
-    <!--        update todo_domain-->
-    <!--        SET title     = #{title},-->
-    <!--            content   = #{content},-->
-    <!--            status    = #{statusCode},-->
-    <!--            update_dt = now()-->
-    <!--        WHERE id = #{id};-->
-    <!--    </update>-->
-
-    <!--    <delete id="deleteDomain" parameterType="int">-->
-    <!--        update todo_domain-->
-    <!--        SET is_del    = 1,-->
-    <!--            delete_dt = now()-->
-    <!--        WHERE id = #{id}-->
-    <!--    </delete>-->
-
-    <!--    <select id="findAllStatus" resultType="net.todo.domain.todo.dto.Todo$Status">-->
-    <!--        select-->
-    <!--            id,-->
-    <!--            description,-->
-    <!--            icon-->
-    <!--        FROM todo_status-->
-    <!--    </select>-->
 </mapper>

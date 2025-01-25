@@ -11,7 +11,7 @@ public interface MuamucService {
 
     Muamuc.Domain addMuamucDomain(Muamuc.Domain muamuc);
 
-    Muamuc.Domain updateMuamuc(Muamuc.Domain muamuc);
+    Muamuc.Domain updateMuamuc(Muamuc.DomainRequest muamuc);
 
-    void deleteMuamucDomain(int id);
+    void deleteMuamuc(Integer id);
 }

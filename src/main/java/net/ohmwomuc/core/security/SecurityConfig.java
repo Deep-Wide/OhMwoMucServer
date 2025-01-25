@@ -35,7 +35,7 @@ public class SecurityConfig {
     private final List<String> allowedRequestUrlList = List.of(
             "/api/security/login",
             "/api/security/login-user",
-            "/api/muamuc",
+            "/api/muamuc/**",
             "/swagger-ui/**",
             "/v3/api-docs/**"
     );

@@ -37,13 +37,13 @@ public class MuamucServiceImpl implements MuamucService {
 
     @Override
     @Transactional
-    public Muamuc.Domain updateMuamuc(Muamuc.Domain muamuc) {
+    public Muamuc.Domain updateMuamuc(Muamuc.DomainRequest muamuc) {
         muamucRepository.updateMuamuc(muamuc);
         return muamucRepository.findDomainById(muamuc.getMuamucId());
     }
 
     @Override
-    public void deleteMuamucDomain(int id) {
+    public void deleteMuamuc(Integer id) {
         muamucRepository.deleteMuamuc(id);
     }
 }

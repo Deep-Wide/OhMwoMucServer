@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Getter
-public enum Tag {
+public enum MuamucTag {
     TODAY_LUNCH(0, "오점먹"),
     TODAY_DINNER(1, "오저먹"),
     WHAT_TODAY_LUNCH(2, "오점뭐"),
@@ -21,9 +23,18 @@ public enum Tag {
     private final Integer id;
     private final String name;
 
-    public static Optional<Tag> getById(int id) {
-        return Arrays.stream(Tag.values())
-                .filter(tag -> tag.getId() == id)
+    public static Optional<MuamucTag> getById(int id) {
+        return Arrays.stream(MuamucTag.values())
+                .filter(muamucTag -> muamucTag.getId() == id)
                 .findAny();
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> tagObj = new HashMap<>();
+
+        tagObj.put("id", id);
+        tagObj.put("name", name);
+
+        return tagObj;
     }
 }

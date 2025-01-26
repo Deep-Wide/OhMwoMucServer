@@ -16,7 +16,7 @@ public class Muamuc {
     public static class Domain {
 
         private int muamucId;
-        private Tag tag;
+        private MuamucTag muamucTag;
         private String title;
         private String content;
         private int restaurantId;
@@ -27,17 +27,17 @@ public class Muamuc {
         private boolean isDel;
 
         public void setTagId(int tagId) {
-            this.tag = Tag.getById(tagId).get();
+            this.muamucTag = MuamucTag.getById(tagId).get();
         }
 
         public int getTagId() {
-            return tag.getId();
+            return muamucTag.getId();
         }
 
         public DomainResponse toResponse() {
             return DomainResponse.builder()
                     .muamucId(muamucId)
-                    .tag(tag)
+                    .tagId(muamucTag.getId())
                     .title(title)
                     .content(content)
                     .restaurantId(restaurantId)
@@ -58,8 +58,8 @@ public class Muamuc {
     public static class DomainResponse {
         @Schema(description = "뭐먹 ID")
         private int muamucId;
-        @Schema(description = "태그")
-        private Tag tag;
+        @Schema(description = "태그 ID")
+        private int tagId;
         @Schema(description = "제목")
         private String title;
         @Schema(description = "내용")
@@ -83,7 +83,7 @@ public class Muamuc {
         @Schema(description = "뭐먹 ID")
         private int muamucId;
         @Schema(description = "태그")
-        private Tag tag;
+        private MuamucTag muamucTag;
         @Schema(description = "제목")
         private String title;
         @Schema(description = "내용")
@@ -94,17 +94,17 @@ public class Muamuc {
         private int writerId;
 
         public void setTagId(int tagId) {
-            this.tag = Tag.getById(tagId).get();
+            this.muamucTag = MuamucTag.getById(tagId).get();
         }
 
         public int getTagId() {
-            return tag.getId();
+            return muamucTag.getId();
         }
 
         public Domain toDomain() {
             return Muamuc.Domain.builder()
                     .muamucId(muamucId)
-                    .tag(tag)
+                    .muamucTag(muamucTag)
                     .title(title)
                     .content(content)
                     .restaurantId(restaurantId)
@@ -119,11 +119,11 @@ public class Muamuc {
     @AllArgsConstructor
     @Builder
     public static class Condition {
-        private Tag tag;
+        private MuamucTag muamucTag;
         private String searchKeyword;
 
         public int getId() {
-            return this.tag.getId();
+            return this.muamucTag.getId();
         }
 
     }

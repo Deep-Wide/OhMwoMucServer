@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.core.security.repository.SecurityMapper">
+    <select id="findUserByEmail" parameterType="java.lang.String"
+            resultType="net.ohmwomuc.core.security.dto.User$UserAccountInfo">
+        select
+            id,
+            nickname,
+            password,
+            auth as role
+        from USER
+        where email = #{email} and status = 0
+    </select>
+
+</mapper>

@@ -1,39 +1,27 @@
 package net.ohmwomuc.core.security.authentication;
 
-import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import net.ohmwomuc.core.security.dto.User;
+import net.ohmwomuc.core.security.service.SecurityService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
+
+    private final SecurityService securityService;
+    private final PasswordEncoder passwordEncoder;
 
     private Map<String, User.UserAccountInfo> userDB = new ConcurrentHashMap<>();
 
-
-    @PostConstruct
-    public void initUser() {
-        userDB.put("popo@naver.com", User.UserAccountInfo.builder()
-                .id(3)
-                .email("popo@naver.com")
-                .nickname("포포")
-                .password("1q2w3e4r")
-                .role(Set.of(new SimpleGrantedAuthority("ROLE_USER")))
-                .build());
-
-        userDB.put("qwqw@google.com", User.UserAccountInfo.builder()
-                .id(7)
-                .email("qwqw@google.com")
-                .nickname("관리자")
-                .password("qawsedrf")
-                .role(Set.of(new SimpleGrantedAuthority("ROLE_ADMIN")))
-                .build());
+    public CustomAuthenticationProvider(PasswordEncoder passwordEncoder, SecurityService securityService) {
+        this.passwordEncoder = passwordEncoder;
+        this.securityService = securityService;
     }
 
     @Override
@@ -41,22 +29,25 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         CustomAuthenticationToken token = (CustomAuthenticationToken) authentication;
 
-        return Optional.ofNullable(userDB.get(token.getName()))
-                .filter(account -> account.getPassword().equals(token.getCredentials())) // 인증 정보 확인 앖으면 Optional.empty() 반환
-                .map(account -> CustomAuthenticationToken.builder()
-                        .principal(User.Principal.builder()
-                                .id(account.getId())
-                                .email(account.getEmail())
-                                .nickname(account.getNickname())
-                                .role(account.getRole())
-                                .build()
-                        )
-                        .credentials(null)
-                        .details(token.getDetails())
-                        .authenticated(true)
-                        .build()
-                )
-                .orElse(null); // 없을 경우 null 반환
+        User.UserAccountInfo account = securityService.loadUserByUserName(token.getName());
+
+        if (account != null
+                && passwordEncoder.matches(token.getCredentials(), account.getPassword())) {
+            //인증 성공
+            return CustomAuthenticationToken.builder()
+                    .principal(User.Principal.builder()
+                            .id(account.getId())
+                            .email(account.getEmail())
+                            .nickname(account.getNickname())
+                            .role(account.getRole())
+                            .build()
+                    )
+                    .credentials(null)
+                    .details(token.getDetails())
+                    .authenticated(true)
+                    .build();
+        }
+        return null;
     }
 
     @Override

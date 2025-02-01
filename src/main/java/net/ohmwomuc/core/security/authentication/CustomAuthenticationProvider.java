@@ -6,6 +6,8 @@ import net.ohmwomuc.core.security.service.SecurityService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Map;
@@ -14,12 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final SecurityService securityService;
+    private final UserDetailsService securityService;
     private final PasswordEncoder passwordEncoder;
 
     private Map<String, User.UserAccountInfo> userDB = new ConcurrentHashMap<>();
 
-    public CustomAuthenticationProvider(PasswordEncoder passwordEncoder, SecurityService securityService) {
+    public CustomAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService securityService) {
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
     }
@@ -29,13 +31,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         CustomAuthenticationToken token = (CustomAuthenticationToken) authentication;
 
-        User.UserAccountInfo account = securityService.loadUserByUserName(token.getName());
+        User.UserAccountInfo account = (User.UserAccountInfo) securityService.loadUserByUsername(token.getName());
 
         if (account != null
                 && passwordEncoder.matches(token.getCredentials(), account.getPassword())) {
             //인증 성공
             return CustomAuthenticationToken.builder()
-                    .principal(User.Principal.builder()
+                    .principal(User.UserAccountInfo.builder()
                             .id(account.getId())
                             .email(account.getEmail())
                             .nickname(account.getNickname())

@@ -11,6 +11,7 @@ import net.ohmwomuc.core.security.authentication.CustomAuthenticationToken;
 import net.ohmwomuc.core.security.dto.User;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -57,14 +58,7 @@ public class CustomEmailPasswordAuthenticationFilter extends UsernamePasswordAut
 
         try (InputStream inputStream = request.getInputStream()) {
             User.LoginRequest loginRequest = objectMapper.readValue(inputStream, User.LoginRequest.class);
-            User.Principal principal = User.Principal.builder()
-                    .email(loginRequest.getEmail())
-                    .build();
-            CustomAuthenticationToken token = CustomAuthenticationToken.builder()
-                    .principal(principal)
-                    .credentials(loginRequest.getPassword())
-                    .build();
-            return this.getAuthenticationManager().authenticate(token);
+            return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         } catch (IOException e) {
             throw new CustomException(CustomExceptionCode.NOT_SUPPORTED_CONTENT_TYPE);
         }

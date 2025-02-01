@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class CustomAuthenticationToken implements Authentication {
-    private User.Principal principal;
+    private User.UserAccountInfo principal;
     private boolean authenticated;
     private String credentials;
     private Collection<? extends GrantedAuthority> authorities;
@@ -24,14 +24,14 @@ public class CustomAuthenticationToken implements Authentication {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Optional.ofNullable(principal)
-                .map(User.Principal::getRole)
+                .map(User.UserAccountInfo::getRole)
                 .orElse(Set.of());
     }
 
     @Override
     public String getName() {
         return Optional.ofNullable(principal)
-                .map(User.Principal::getEmail)
+                .map(User.UserAccountInfo::getEmail)
                 .orElse(null);
     }
 }

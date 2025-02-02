@@ -37,6 +37,7 @@ public class User {
     public static class LoginRequest {
         private String email;
         private String password;
+        private boolean rememberMe;
     }
 
     @Getter
@@ -62,7 +63,21 @@ public class User {
 
         @Override
         public String getUsername() {
-            return nickname;
+            return email;
+        }
+
+        public UserResponse toResponse() {
+            Set<String> authoritiesSet = role.stream()
+                    .map(r -> r.getAuthority())
+                    .collect(Collectors.toSet());
+
+            return UserResponse.builder()
+                    .id(id)
+                    .email(email)
+                    .nickname(nickname)
+                    .role(authoritiesSet)
+                    .isSysAdmin(authoritiesSet.stream().anyMatch(a -> a.equals(SYS_ADMIN.toString())))
+                    .build();
         }
     }
 

@@ -5,6 +5,7 @@
             resultType="net.ohmwomuc.core.security.dto.User$UserAccountInfo">
         select
             id,
+            email,
             nickname,
             password,
             auth as role

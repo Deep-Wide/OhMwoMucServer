@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import net.ohmwomuc.core.exception.CustomExceptionHandler;
 import net.ohmwomuc.core.security.authentication.CustomAuthenticationProvider;
 import net.ohmwomuc.core.security.filter.CustomEmailPasswordAuthenticationFilter;
+import net.ohmwomuc.core.security.service.CustomRememberMeService;
 import net.ohmwomuc.core.security.service.SecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +21,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +52,10 @@ public class SecurityConfig {
     );
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           AuthenticationManager authenticationManager,
+                                           SecurityContextRepository securityContextRepository,
+                                           RememberMeServices rememberMeServices) throws Exception {
         http.authorizeHttpRequests(auth -> auth.requestMatchers(allowedRequestUrlList.toArray(String[]::new))
                         .permitAll()
                         .anyRequest()
@@ -56,9 +64,13 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(configurationSource()))
-                .addFilterBefore(new CustomEmailPasswordAuthenticationFilter(authenticationManager, securityContextRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomEmailPasswordAuthenticationFilter(
+                        authenticationManager,
+                        securityContextRepository,
+                        rememberMeServices), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex.accessDeniedHandler(getAccessDeniedHandler())
                         .authenticationEntryPoint(getAuthenticationEntryPoint()))
+                .rememberMe(r -> r.rememberMeServices(rememberMeServices))
                 .logout(logout -> logout.logoutUrl("/api/security/logout")
                         .logoutSuccessHandler(getLogoutSuccessHandler())
                         .invalidateHttpSession(true)
@@ -120,5 +132,24 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public RememberMeServices rememberMeServices(UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {
+        return new CustomRememberMeService("uniqueAndSecretKey", userDetailsService, persistentTokenRepository);
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+
+        try {
+            jdbcTokenRepository.removeUserTokens("test");
+        } catch (Exception e) {
+            jdbcTokenRepository.setCreateTableOnStartup(true);
+        }
+
+        return jdbcTokenRepository;
     }
 }

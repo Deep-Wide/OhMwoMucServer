@@ -21,6 +21,7 @@ public class Muamuc {
         private String content;
         private int restaurantId;
         private int writerId;
+        private String writerName;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private LocalDateTime deletedAt;
@@ -42,6 +43,7 @@ public class Muamuc {
                     .content(content)
                     .restaurantId(restaurantId)
                     .writerId(writerId)
+                    .writerName(writerName)
                     .createdAt(createdAt)
                     .updatedAt(updatedAt)
                     .build();
@@ -68,6 +70,8 @@ public class Muamuc {
         private int restaurantId;
         @Schema(description = "작성자 ID")
         private int writerId;
+        @Schema(description = "작성자 닉네임")
+        private String writerName;
         @Schema(description = "생성 일시")
         private LocalDateTime createdAt;
         @Schema(description = "수정 일시")
@@ -92,6 +96,8 @@ public class Muamuc {
         private int restaurantId;
         @Schema(description = "작성자 ID")
         private int writerId;
+        @Schema(description = "작성자 닉네임")
+        private String writerName;
 
         public void setTagId(int tagId) {
             this.muamucTag = MuamucTag.getById(tagId).get();
@@ -109,6 +115,7 @@ public class Muamuc {
                     .content(content)
                     .restaurantId(restaurantId)
                     .writerId(writerId)
+                    .writerName(writerName)
                     .build();
         }
     }

@@ -3,8 +3,10 @@
 <mapper namespace="net.ohmwomuc.domain.muamuc.repository.MuamucMapper">
     <select id="findAllDomain" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Condition"
             resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
-        SELECT *
-        FROM MUAMUC muamuc
+        SELECT
+            muamuc.*,
+            coalesce(nickname, '탈퇴된 사용자') as writerName
+        FROM MUAMUC muamuc LEFT OUTER JOIN USER u on writer_id = id
         WHERE muamuc.tag_id = #{id}
         AND is_del = 0
         <if test="searchKeyword != null and searchKeyword != ''">
@@ -23,8 +25,10 @@
 
     <select id="findDomainById" parameterType="int" resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
         <!--        <include refid="findAllDomain"></include>-->
-        SELECT *
-        FROM MUAMUC muamuc
+        SELECT
+            muamuc.*,
+            coalesce(nickname, '탈퇴된 사용자') as writerName
+        FROM MUAMUC muamuc LEFT OUTER JOIN USER u on writer_id = id
         where muamuc.muamuc_id = #{id}
     </select>
 

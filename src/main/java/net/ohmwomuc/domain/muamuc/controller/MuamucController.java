@@ -50,7 +50,7 @@ public class MuamucController {
     @PostMapping("")
     @Operation(summary = "Muamuc 게시물 작성")
     public ResponseEntity<Muamuc.DomainResponse> addMuamuc(@RequestBody Muamuc.DomainRequest muamuc) {
-//        securityService.getLoginUser().orElseThrow(() -> new CustomException(CustomExceptionCode.USER_UNAUTHORIZED));
+        securityService.getLoginUser().orElseThrow(() -> new CustomException(CustomExceptionCode.USER_UNAUTHORIZED));
         Muamuc.DomainResponse response = muamucService.addMuamucDomain(muamuc.toDomain()).toResponse();
 
         return ResponseEntity.status(CREATED).body(response);

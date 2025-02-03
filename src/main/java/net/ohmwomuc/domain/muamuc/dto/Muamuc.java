@@ -56,7 +56,7 @@ public class Muamuc {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    @Schema(description = "Muamuc 도메인 request")
+    @Schema(description = "Muamuc response")
     public static class DomainResponse {
         @Schema(description = "뭐먹 ID")
         private int muamucId;

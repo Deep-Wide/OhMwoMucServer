@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
 
@@ -27,12 +28,13 @@ import static net.ohmwomuc.core.exception.CustomExceptionCode.FAILURE_AUTHENTICA
 
 public class CustomEmailPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public CustomEmailPasswordAuthenticationFilter(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository) {
+    public CustomEmailPasswordAuthenticationFilter(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository, RememberMeServices rememberMeServices) {
         super(authenticationManager);
         setFilterProcessesUrl("/api/security/login");
         setAuthenticationSuccessHandler(getAuthenticationSuccessHandler());
         setAuthenticationFailureHandler(getAuthenticationFailureHandler());
         setSecurityContextRepository(securityContextRepository);
+        setRememberMeServices(rememberMeServices);
     }
 
     private AuthenticationSuccessHandler getAuthenticationSuccessHandler() {
@@ -58,6 +60,7 @@ public class CustomEmailPasswordAuthenticationFilter extends UsernamePasswordAut
 
         try (InputStream inputStream = request.getInputStream()) {
             User.LoginRequest loginRequest = objectMapper.readValue(inputStream, User.LoginRequest.class);
+            request.setAttribute("remember_me", loginRequest.isRememberMe());
             return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         } catch (IOException e) {
             throw new CustomException(CustomExceptionCode.NOT_SUPPORTED_CONTENT_TYPE);

@@ -13,5 +13,8 @@ public interface CommentService {
 
     Comment.Domain updateComment(Comment.DomainRequest comment);
 
+    Comment.DomainResponse getCommentByCommentId(int commentId);
+
     void deleteComment(int commentId);
+
 }

@@ -7,7 +7,6 @@ import net.ohmwomuc.core.exception.CustomExceptionCode;
 import net.ohmwomuc.core.security.service.SecurityService;
 import net.ohmwomuc.domain.comment.dto.Comment;
 import net.ohmwomuc.domain.comment.service.CommentService;
-import net.ohmwomuc.domain.muamuc.dto.Muamuc;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,7 @@ public class CommentController {
     private final CommentService commentService;
     private final SecurityService securityService;
 
-    @GetMapping("/{muamucId}")
+    @GetMapping("/muamuc/{muamucId}")
     public ResponseEntity<List<Comment.DomainResponse>> getCommentList(@PathVariable("muamucId") int muamucId) {
         List<Comment.Domain> commentList = commentService.getCommentListByMuamucId(muamucId);
 
@@ -42,8 +41,14 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{commentId}")
-    public ResponseEntity<Comment.DomainResponse> updataCommentById(@PathVariable("commentId") int commentId, @RequestBody Comment.DomainRequest comment) {
+    @GetMapping("/{commentId}")
+    public ResponseEntity<Comment.DomainResponse> getComment(@PathVariable("commentId") int commentId) {
+        Comment.DomainResponse comment = commentService.getCommentByCommentId(commentId);
+        return ResponseEntity.ok(comment);
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<Comment.DomainResponse> updateCommentById(@PathVariable("commentId") int commentId, @RequestBody Comment.DomainRequest comment) {
         if (commentId != comment.getCommentId()) {
             throw new CustomException(CustomExceptionCode.NOT_SUPPORTED_CONTENT_TYPE);
         }

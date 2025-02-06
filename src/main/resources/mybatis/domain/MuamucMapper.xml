@@ -3,12 +3,18 @@
 <mapper namespace="net.ohmwomuc.domain.muamuc.repository.MuamucMapper">
     <select id="findAllDomain" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Condition"
             resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
-        SELECT
-            muamuc.*,
-            coalesce(nickname, '탈퇴된 사용자') as writerName
-        FROM MUAMUC muamuc LEFT OUTER JOIN USER u on writer_id = id
+        SELECT muamuc.*,
+        COALESCE(u.nickname, '탈퇴된 사용자') AS writerName,
+        COALESCE(comment_count, 0) AS comment_count
+        FROM MUAMUC muamuc
+        LEFT OUTER JOIN USER u ON muamuc.writer_id = u.id
+        LEFT OUTER JOIN (
+        SELECT muamuc_id, COUNT(*) AS comment_count
+        FROM COMMENT C
+        GROUP BY muamuc_id
+        ) AS C ON muamuc.muamuc_id = C.muamuc_id
         WHERE muamuc.tag_id = #{id}
-        AND is_del = 0
+        AND muamuc.is_del = 0
         <if test="searchKeyword != null and searchKeyword != ''">
             AND (muamuc.title LIKE CONCAT('%', #{searchKeyword}, '%')
             OR muamuc.content LIKE CONCAT('%', #{searchKeyword}, '%'))

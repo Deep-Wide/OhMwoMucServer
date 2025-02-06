@@ -15,7 +15,7 @@
         FROM COMMENT c
                  LEFT JOIN COMMENT p ON c.parent_id = p.comment_id
                  INNER JOIN USER u on c.user_id = u.id
-        WHERE c.muamuc_id = #{muamucId}
+        WHERE c.muamuc_id = #{muamucId} AND c.is_del = 0
         ORDER BY p.comment_id IS NULL DESC,
                  c.created_at
     </select>
@@ -38,15 +38,15 @@
 
     <update id="updateComment" parameterType="net.ohmwomuc.domain.comment.dto.Comment$DomainRequest">
         update COMMENT
-        SET comment_text = #{commentText},
-        WHERE comment_id
+        SET comment_text = #{commentText}
+        WHERE comment_id = #{commentId}
     </update>
 
     <update id="deleteComment" parameterType="int">
         update COMMENT
         Set deleted_at = CURRENT_TIMESTAMP,
             is_del = true
-        Where comment_id
+        Where comment_id = #{commentId}
     </update>
 
 </mapper>

@@ -39,6 +39,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Comment.DomainResponse getCommentByCommentId(int commentId) {
+        return findCommentByCommentId(commentId).toResponse();
+    }
+
+    @Override
     public void deleteComment(int commentId) {
         commentRepository.deleteComment(commentId);
     }

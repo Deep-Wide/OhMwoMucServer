@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.domain.likes.repository.LikesMapper">
+    <select id="getLikesCountByMuamucId" parameterType="int"
+            resultType="java.lang.Integer">
+        SELECT COALESCE(COUNT(muamuc_id), 0),
+               muamuc_id
+        FROM LIKES
+        WHERE muamuc_id = #{muamuc_id}
+        GROUP BY muamuc_id
+    </select>
+
+    <insert id="addLikesCount" parameterType="net.ohmwomuc.domain.likes.dto.Like$DomainRequest">
+        insert into LIKES
+            (user_id, muamuc_id)
+        VALUES (#{userId}, #{muamucId})
+    </insert>
+
+    <select id="getLikesByuserIdAndMuamucId" parameterType="int" resultType="net.ohmwomuc.domain.likes.dto.Like$DomainResponse">
+        SELECT
+            *
+        FROM LIKES l
+        where l.user_id = #{userId} AND l.muamuc_id = #{muamucId}
+    </select>
+
+    <delete id="deleteLikesCount" parameterType="net.ohmwomuc.domain.likes.dto.Like$DomainResponse">
+        DELETE
+        FROM LIKES
+        WHERE muamuc_id = #{muamucId}
+          AND user_id = #{userId}
+    </delete>
+
+</mapper>

@@ -5,7 +5,8 @@
             resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
         SELECT muamuc.*,
         COALESCE(u.nickname, '탈퇴된 사용자') AS writerName,
-        COALESCE(comment_count, 0) AS comment_count
+        COALESCE(comment_count, 0) AS comment_count,
+        COALESCE(like_count, 0) AS like_count
         FROM MUAMUC muamuc
         LEFT OUTER JOIN USER u ON muamuc.writer_id = u.id
         LEFT OUTER JOIN (
@@ -13,6 +14,12 @@
         FROM COMMENT C
         GROUP BY muamuc_id
         ) AS C ON muamuc.muamuc_id = C.muamuc_id
+        LEFT OUTER JOIN (
+        SELECT COUNT(muamuc_id) AS like_count,
+        muamuc_id
+        FROM LIKES L
+        GROUP BY muamuc_id
+        ) AS L ON muamuc.muamuc_id = L.muamuc_id
         WHERE muamuc.tag_id = #{id}
         AND muamuc.is_del = 0
         <if test="searchKeyword != null and searchKeyword != ''">
@@ -32,16 +39,23 @@
     <select id="findDomainById" parameterType="int" resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
         <!--        <include refid="findAllDomain"></include>-->
         SELECT
-            muamuc.*,
-            coalesce(nickname, '탈퇴된 사용자') as writerName
+        muamuc.*,
+        coalesce(nickname, '탈퇴된 사용자') as writerName,
+        COALESCE(like_count, 0) AS like_count
         FROM MUAMUC muamuc LEFT OUTER JOIN USER u on writer_id = id
+        LEFT OUTER JOIN (
+        SELECT COUNT(muamuc_id) AS like_count,
+        muamuc_id
+        FROM LIKES L
+        GROUP BY muamuc_id
+        ) AS L ON muamuc.muamuc_id = L.muamuc_id
         where muamuc.muamuc_id = #{id}
     </select>
 
     <update id="updateMuamuc" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$DomainRequest">
         update MUAMUC
-        SET title = #{title},
-            tag_id = #{tagId},
+        SET title   = #{title},
+            tag_id  = #{tagId},
             content = #{content}
         WHERE muamuc_id = #{muamucId}
     </update>
@@ -49,7 +63,7 @@
     <update id="deleteMuamuc" parameterType="java.lang.Integer">
         update MUAMUC
         Set deleted_at = CURRENT_TIMESTAMP,
-            is_del = true
+            is_del     = true
         Where muamuc_id = #{id}
     </update>
 

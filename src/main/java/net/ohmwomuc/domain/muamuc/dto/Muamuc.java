@@ -27,6 +27,7 @@ public class Muamuc {
         private LocalDateTime deletedAt;
         private boolean isDel;
         private int commentCount;
+        private int likeCount;
 
         public void setTagId(int tagId) {
             this.muamucTag = MuamucTag.getById(tagId).get();
@@ -48,6 +49,7 @@ public class Muamuc {
                     .createdAt(createdAt)
                     .updatedAt(updatedAt)
                     .commentCount(commentCount)
+                    .likeCount(likeCount)
                     .build();
 
         }
@@ -80,6 +82,8 @@ public class Muamuc {
         private LocalDateTime updatedAt;
         @Schema(description = "댓글 개수")
         private int commentCount;
+        @Schema(description = "좋아요 개수")
+        private int likeCount;
     }
 
     @Getter

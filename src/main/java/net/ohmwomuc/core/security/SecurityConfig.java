@@ -48,6 +48,7 @@ public class SecurityConfig {
             "/api/security/login-user",
             "/api/muamuc/**",
             "/api/comment/**",
+            "/api/likes/**",
             "/swagger-ui/**",
             "/v3/api-docs/**"
     );

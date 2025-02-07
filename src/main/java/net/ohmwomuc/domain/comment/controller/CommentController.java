@@ -35,7 +35,7 @@ public class CommentController {
 
     @PostMapping("")
     public ResponseEntity<Comment.DomainResponse> addComment(@RequestBody Comment.DomainRequest comment) {
-//        securityService.getLoginUser().orElseThrow(() -> new CustomException(CustomExceptionCode.USER_UNAUTHORIZED));
+        securityService.getLoginUser().orElseThrow(() -> new CustomException(CustomExceptionCode.USER_UNAUTHORIZED));
         Comment.DomainResponse response = commentService.createComment(comment).toResponse();
 
         return ResponseEntity.ok(response);

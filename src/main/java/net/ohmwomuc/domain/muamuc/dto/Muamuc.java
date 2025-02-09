@@ -28,6 +28,7 @@ public class Muamuc {
         private boolean isDel;
         private int commentCount;
         private int likeCount;
+        private boolean isLiked;
 
         public void setTagId(int tagId) {
             this.muamucTag = MuamucTag.getById(tagId).get();
@@ -50,6 +51,7 @@ public class Muamuc {
                     .updatedAt(updatedAt)
                     .commentCount(commentCount)
                     .likeCount(likeCount)
+                    .isLiked(isLiked)
                     .build();
 
         }
@@ -84,6 +86,9 @@ public class Muamuc {
         private int commentCount;
         @Schema(description = "좋아요 개수")
         private int likeCount;
+        @Schema(description = "좋아요 여부")
+        private boolean isLiked;
+
     }
 
     @Getter
@@ -136,6 +141,7 @@ public class Muamuc {
     public static class Condition {
         private MuamucTag muamucTag;
         private String searchKeyword;
+        private int userId;
 
         public int getId() {
             return this.muamucTag.getId();

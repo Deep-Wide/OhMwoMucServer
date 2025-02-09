@@ -36,8 +36,9 @@ public class MuamucController {
 
     @GetMapping("")
     @Operation(summary = "Muamuc 게시물 태그별 전체 리스트 조회")
-    public ResponseEntity<List<Muamuc.DomainResponse>> getMuamucList(@RequestParam(name = "tag", required = true) Integer tagId, @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
+    public ResponseEntity<List<Muamuc.DomainResponse>> getMuamucList(@RequestParam(name = "userId", required = false) Integer userId, @RequestParam(name = "tag", required = true) Integer tagId, @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
         List<Muamuc.Domain> muamucList = muamucService.getMuamucList(Muamuc.Condition.builder()
+                .userId(userId)
                 .muamucTag(MuamucTag.getById(tagId).orElse(null))
                 .searchKeyword(searchKeyword)
                 .build());

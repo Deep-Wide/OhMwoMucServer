@@ -14,8 +14,8 @@ public class Like {
     @AllArgsConstructor
     @Builder
     public static class DomainResponse {
-        private Integer muamuc_id;
-        private Integer likes_count;
+        private Integer muamucId;
+        private Integer likesCount;
     }
 
     @Getter
@@ -24,7 +24,7 @@ public class Like {
     @AllArgsConstructor
     @Builder
     public static class DomainRequest {
-        private Integer user_id;
-        private Integer muamuc_id;
+        private Integer userId;
+        private Integer muamucId;
     }
 }

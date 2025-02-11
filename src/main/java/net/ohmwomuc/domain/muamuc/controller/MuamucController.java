@@ -59,8 +59,12 @@ public class MuamucController {
 
     @GetMapping("/{muamucId}")
     @Operation(summary = "Muamuc 게시물 조회")
-    public ResponseEntity<Muamuc.DomainResponse> getMuamucById(@PathVariable("muamucId") Integer muamucId) {
-        Muamuc.DomainResponse muamuc = muamucService.findById(muamucId).toResponse();
+    public ResponseEntity<Muamuc.DomainResponse> getMuamucById(@PathVariable("muamucId") Integer muamucId, @RequestParam(name = "userId") Integer userId) {
+        Muamuc.MuamucIdUserId ids = Muamuc.MuamucIdUserId.builder()
+                .muamucId(muamucId)
+                .userId(userId)
+                .build();
+        Muamuc.DomainResponse muamuc = muamucService.findById(ids).toResponse();
 
         return ResponseEntity.ok(muamuc);
     }

@@ -7,7 +7,7 @@ import java.util.List;
 public interface MuamucService {
     List<Muamuc.Domain> getMuamucList(Muamuc.Condition condition);
 
-    Muamuc.Domain findById(int id);
+    Muamuc.Domain findById(Muamuc.MuamucIdUserId ids);
 
     Muamuc.Domain addMuamucDomain(Muamuc.Domain muamuc);
 

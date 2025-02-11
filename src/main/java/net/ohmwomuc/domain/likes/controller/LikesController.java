@@ -26,31 +26,30 @@ public class LikesController {
     @GetMapping("/{muamucId}")
     public ResponseEntity<Like.DomainResponse> getLikes(@PathVariable("muamucId") Integer muamucId) {
         Like.DomainResponse likes = Like.DomainResponse.builder()
-                .likes_count(likesService.getLikesCountByMuamucId(muamucId))
-                .muamuc_id(muamucId)
+                .likesCount(likesService.getLikesCountByMuamucId(muamucId))
+                .muamucId(muamucId)
                 .build();
 
         return ResponseEntity.ok(likes);
     }
 
     @PostMapping("")
-    public ResponseEntity<Like.DomainResponse> addLike(@RequestBody Like.DomainRequest like) {
+    public ResponseEntity<Boolean> reverseLike(@RequestBody Like.DomainRequest like) {
         securityService.getLoginUser().orElseThrow(() -> new CustomException(CustomExceptionCode.USER_UNAUTHORIZED));
 
-        Like.DomainResponse likes = likesService.addLikesCountByMuamucId(like);
-        return ResponseEntity.ok(likes);
+        return ResponseEntity.ok(likesService.reverseLike(like));
     }
 
-    @DeleteMapping("/{muamucId}/{userId}")
-    public ResponseEntity<Boolean> deleteLike(@PathVariable("muamucId") Integer muamucId, @PathVariable("userId") Integer userId) {
-        securityService.getLoginUser().orElseThrow(() -> new CustomException(CustomExceptionCode.USER_UNAUTHORIZED));
-
-        Like.DomainRequest deleteTargetLike = Like.DomainRequest.builder()
-                .muamuc_id(muamucId)
-                .user_id(userId)
-                .build();
-        likesService.deleteLike(deleteTargetLike);
-        return ResponseEntity.status(NO_CONTENT).build();
-    }
+//    @DeleteMapping("/{muamucId}/{userId}")
+//    public ResponseEntity<Boolean> deleteLike(@PathVariable("muamucId") Integer muamucId, @PathVariable("userId") Integer userId) {
+//        securityService.getLoginUser().orElseThrow(() -> new CustomException(CustomExceptionCode.USER_UNAUTHORIZED));
+//
+//        Like.DomainRequest deleteTargetLike = Like.DomainRequest.builder()
+//                .muamuc_id(muamucId)
+//                .user_id(userId)
+//                .build();
+//        likesService.deleteLike(deleteTargetLike);
+//        return ResponseEntity.status(NO_CONTENT).build();
+//    }
 
 }

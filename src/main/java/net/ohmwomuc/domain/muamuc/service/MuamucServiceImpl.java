@@ -21,8 +21,8 @@ public class MuamucServiceImpl implements MuamucService {
     }
 
     @Override
-    public Muamuc.Domain findById(int id) {
-        return muamucRepository.findDomainById(id);
+    public Muamuc.Domain findById(Muamuc.MuamucIdUserId ids) {
+        return muamucRepository.findDomainById(ids);
     }
 
     @Override
@@ -32,14 +32,15 @@ public class MuamucServiceImpl implements MuamucService {
             throw new IllegalArgumentException("Muamuc title cannot be empty");
         }
         muamucRepository.createMuamuc(muamuc);
-        return muamucRepository.findDomainById(muamuc.getMuamucId());
+
+        return muamucRepository.findDomainById(Muamuc.MuamucIdUserId.builder().muamucId(muamuc.getMuamucId()).userId(muamuc.getWriterId()).build());
     }
 
     @Override
     @Transactional
     public Muamuc.Domain updateMuamuc(Muamuc.DomainRequest muamuc) {
         muamucRepository.updateMuamuc(muamuc);
-        return muamucRepository.findDomainById(muamuc.getMuamucId());
+        return muamucRepository.findDomainById(Muamuc.MuamucIdUserId.builder().muamucId(muamuc.getMuamucId()).userId(muamuc.getWriterId()).build());
     }
 
     @Override

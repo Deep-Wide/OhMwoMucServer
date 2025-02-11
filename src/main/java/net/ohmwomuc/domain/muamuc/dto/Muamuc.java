@@ -148,4 +148,14 @@ public class Muamuc {
         }
 
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MuamucIdUserId {
+        private int muamucId;
+        private int userId;
+    }
 }

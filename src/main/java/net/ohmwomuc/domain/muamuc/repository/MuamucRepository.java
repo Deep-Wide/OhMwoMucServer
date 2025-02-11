@@ -9,7 +9,7 @@ public interface MuamucRepository {
 
     List<Muamuc.Domain> findAllDomain(Muamuc.Condition condition);
 
-    Muamuc.Domain findDomainById(int id);
+    Muamuc.Domain findDomainById(Muamuc.MuamucIdUserId ids);
 
     void createMuamuc(Muamuc.Domain muamuc);
 

@@ -13,3 +13,6 @@ jasypt:
 logging:
   level:
     root: debug
+
+files:
+  uploaded-path: /Users/bean/Development/OhMwoMuc/OhMwoMucFiles

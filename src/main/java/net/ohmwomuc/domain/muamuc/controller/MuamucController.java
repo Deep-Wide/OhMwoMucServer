@@ -87,4 +87,17 @@ public class MuamucController {
 
         return ResponseEntity.status(NO_CONTENT).build();
     }
+
+    @GetMapping("{muamucId}/images")
+    @Operation(summary = "Muamuc 게시물 사진 조회")
+    public ResponseEntity<List<Muamuc.File>> getFiles(@PathVariable("muamucId") Integer muamucId) {
+        return ResponseEntity.ok(muamucService.getMuamucFileList(muamucId));
+    }
+
+    @PostMapping("/images")
+    @Operation(summary = "Muamuc 게시물 사진 저장")
+    public ResponseEntity<Void> addMuamucFile(@RequestBody List<Muamuc.File> files) {
+        muamucService.addMuamucFiles(files);
+        return ResponseEntity.ok().build();
+    }
 }

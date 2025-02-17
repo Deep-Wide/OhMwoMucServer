@@ -17,4 +17,7 @@ public interface MuamucRepository {
 
     void deleteMuamuc(Integer id);
 
+    List<Muamuc.File> getMuamucFileList(Integer muamucId);
+
+    void addMuamucFiles(List<Muamuc.File> files);
 }

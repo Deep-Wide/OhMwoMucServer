@@ -47,4 +47,14 @@ public class MuamucServiceImpl implements MuamucService {
     public void deleteMuamuc(Integer id) {
         muamucRepository.deleteMuamuc(id);
     }
+
+    @Override
+    public List<Muamuc.File> getMuamucFileList(Integer muamucId) {
+        return muamucRepository.getMuamucFileList(muamucId);
+    }
+
+    @Override
+    public void addMuamucFiles(List<Muamuc.File> files) {
+        muamucRepository.addMuamucFiles(files);
+    }
 }

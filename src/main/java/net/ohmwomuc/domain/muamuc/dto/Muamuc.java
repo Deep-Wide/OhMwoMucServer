@@ -158,4 +158,16 @@ public class Muamuc {
         private int muamucId;
         private int userId;
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class File {
+        private int muamucId;
+        private int fileId;
+        private String uniqueFileName;
+        private String fileName;
+    }
 }

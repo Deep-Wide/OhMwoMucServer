@@ -91,4 +91,21 @@
         Where muamuc_id = #{id}
     </update>
 
+    <select id="getMuamucFileList" resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$File" parameterType="int">
+        select f.file_id,
+               f.sys_file_name as uniqueFileName,
+               f.file_name,
+               mf.muamuc_id
+        from FILE f
+                 INNER JOIN MUAMUC_FILE_MAPPING mf on f.file_id = mf.file_id
+        where mf.muamuc_id = #{muamucId}
+    </select>
+
+    <insert id="addMuamucFiles" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$File">
+        insert into MUAMUC_FILE_MAPPING(file_id, muamuc_id)
+        <foreach collection="list" item="file" open="values" separator=",">
+            (#{file.fileId}, #{file.muamucId})
+        </foreach>
+    </insert>
+
 </mapper>

@@ -49,6 +49,7 @@ public class SecurityConfig {
             "/api/muamuc/**",
             "/api/comment/**",
             "/api/likes/**",
+            "/api/files/**",
             "/swagger-ui/**",
             "/v3/api-docs/**"
     );

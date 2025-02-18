@@ -10,6 +10,7 @@ import net.ohmwomuc.domain.muamuc.dto.Muamuc;
 import net.ohmwomuc.domain.muamuc.dto.MuamucTag;
 import net.ohmwomuc.domain.muamuc.service.MuamucService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public class MuamucController {
         return ResponseEntity.ok(muamuc);
     }
 
-    @PostMapping("{muamucId}")
+    @PutMapping("{muamucId}")
     @Operation(summary = "Muamuc 게시물 수정")
     public ResponseEntity<Muamuc.DomainResponse> updateMuamucById(@PathVariable("muamucId") Integer muamucId, @RequestBody Muamuc.DomainRequest muamuc) {
         if (muamucId != muamuc.getMuamucId()) {
@@ -94,10 +95,10 @@ public class MuamucController {
         return ResponseEntity.ok(muamucService.getMuamucFileList(muamucId));
     }
 
-    @PostMapping("/images")
+    @PostMapping("{muamucId}/images")
     @Operation(summary = "Muamuc 게시물 사진 저장")
-    public ResponseEntity<Void> addMuamucFile(@RequestBody List<Muamuc.File> files) {
-        muamucService.addMuamucFiles(files);
+    public ResponseEntity<Void> addMuamucFile(@RequestBody List<Muamuc.File> files, @PathVariable Integer muamucId) {
+        muamucService.addMuamucFiles(files, muamucId);
         return ResponseEntity.ok().build();
     }
 }

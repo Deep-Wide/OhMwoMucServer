@@ -54,7 +54,13 @@ public class MuamucServiceImpl implements MuamucService {
     }
 
     @Override
-    public void addMuamucFiles(List<Muamuc.File> files) {
-        muamucRepository.addMuamucFiles(files);
+    @Transactional
+    public void addMuamucFiles(List<Muamuc.File> files, Integer muamucId) {
+        if (muamucRepository.getMuamucFileList(muamucId) != null) {
+            muamucRepository.clearMuamucFiles(muamucId);
+        }
+        if (files.size() > 0) {
+            muamucRepository.addMuamucFiles(files);
+        }
     }
 }

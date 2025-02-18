@@ -17,5 +17,5 @@ public interface MuamucService {
 
     List<Muamuc.File> getMuamucFileList(Integer muamucId);
 
-    void addMuamucFiles(List<Muamuc.File> files);
+    void addMuamucFiles(List<Muamuc.File> files, Integer muamucId);
 }

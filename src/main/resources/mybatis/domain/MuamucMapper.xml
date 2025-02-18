@@ -108,4 +108,10 @@
         </foreach>
     </insert>
 
+    <delete id="clearMuamucFiles">
+        DELETE FROM MUAMUC_FILE_MAPPING
+        WHERE muamuc_id = #{muamucId}
+    </delete>
+
+
 </mapper>

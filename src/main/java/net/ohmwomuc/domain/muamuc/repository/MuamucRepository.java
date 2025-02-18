@@ -20,4 +20,6 @@ public interface MuamucRepository {
     List<Muamuc.File> getMuamucFileList(Integer muamucId);
 
     void addMuamucFiles(List<Muamuc.File> files);
+
+    void clearMuamucFiles(Integer muamucId);
 }

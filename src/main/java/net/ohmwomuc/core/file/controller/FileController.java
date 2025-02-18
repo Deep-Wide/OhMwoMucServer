@@ -43,4 +43,5 @@ public class FileController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(resource);
     }
+
 }

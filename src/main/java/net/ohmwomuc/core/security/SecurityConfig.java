@@ -2,17 +2,13 @@ package net.ohmwomuc.core.security;
 
 import jakarta.servlet.http.HttpServletResponse;
 import net.ohmwomuc.core.exception.CustomExceptionHandler;
-import net.ohmwomuc.core.security.authentication.CustomAuthenticationProvider;
 import net.ohmwomuc.core.security.filter.CustomEmailPasswordAuthenticationFilter;
 import net.ohmwomuc.core.security.service.CustomRememberMeService;
-import net.ohmwomuc.core.security.service.SecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,7 +30,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static net.ohmwomuc.core.exception.CustomExceptionCode.USER_FORBIDDEN;
 import static net.ohmwomuc.core.exception.CustomExceptionCode.USER_UNAUTHORIZED;

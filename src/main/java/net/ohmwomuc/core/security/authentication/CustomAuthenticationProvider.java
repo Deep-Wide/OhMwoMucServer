@@ -2,11 +2,9 @@ package net.ohmwomuc.core.security.authentication;
 
 import lombok.RequiredArgsConstructor;
 import net.ohmwomuc.core.security.dto.User;
-import net.ohmwomuc.core.security.service.SecurityService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

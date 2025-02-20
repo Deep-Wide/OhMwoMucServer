@@ -10,7 +10,6 @@ import net.ohmwomuc.domain.muamuc.dto.Muamuc;
 import net.ohmwomuc.domain.muamuc.dto.MuamucTag;
 import net.ohmwomuc.domain.muamuc.service.MuamucService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;

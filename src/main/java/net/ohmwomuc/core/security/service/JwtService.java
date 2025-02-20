@@ -14,7 +14,7 @@ import java.time.Instant;
 public class JwtService {
 
     private static MacAlgorithm algorithm = Jwts.SIG.HS512;
-    public static final String BEARER = "Bearer";
+    public static final String BEARER = "Bearer ";
 
     @Value("${jwt.atk-expired-time}")
     private long atkExpiredTime;

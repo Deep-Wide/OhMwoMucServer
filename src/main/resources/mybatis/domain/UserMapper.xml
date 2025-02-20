@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.domain.user.repository.UserMapper">
+
+    <select id="getUserInfo" parameterType="java.lang.Integer" resultType="net.ohmwomuc.domain.user.dto.UserInfo$Domain">
+        select id, email, nickname
+        from USER
+        where id = #{userId}
+    </select>
+
+    <select id="getUserImage" parameterType="java.lang.Integer" resultType="net.ohmwomuc.domain.user.dto.UserInfo$Image">
+        select
+            F.file_id,
+            F.file_name,
+            F.sys_file_name as uniqueFileName,
+            UFM.user_id
+        from FILE F INNER JOIN USER_FILE_MAPPING UFM on F.file_id = UFM.file_id
+        where UFM.user_id = #{userId}
+    </select>
+
+    <update id="updateUserNickname" parameterType="net.ohmwomuc.domain.user.dto.UserInfo$Domain">
+        update USER
+            set nickname = #{nickname}
+        where id = #{id}
+    </update>
+
+    <insert id="addUserImage" parameterType="net.ohmwomuc.domain.user.dto.UserInfo$Image">
+        insert into USER_FILE_MAPPING(file_id, user_id)
+        values (#{image.fileId}, #{image.userId})
+    </insert>
+
+    <delete id="clearUserImage" parameterType="java.lang.Integer">
+        delete FROM USER_FILE_MAPPING
+        where user_id = #{userId}
+    </delete>
+</mapper>

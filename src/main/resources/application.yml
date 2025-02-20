@@ -16,3 +16,6 @@ logging:
 
 files:
   uploaded-path: /Users/bean/Development/OhMwoMuc/OhMwoMucFiles
+
+jwt:
+  atk-expired-time: 1800

@@ -37,6 +37,17 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{userId}/email")
+    public ResponseEntity<Void> updateUserEmail(@PathVariable Integer userId, @RequestBody UserInfo.Request request) {
+        UserInfo.Domain domain = UserInfo.Request
+                .builder()
+                .id(userId)
+                .email(request.getEmail())
+                .build().toDomain();
+        userService.updateUserEmail(domain);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("{userId}/image")
     public ResponseEntity<UserInfo.Image> getUserImage(@PathVariable Integer userId) {
         UserInfo.Image image = userService.getUserImage(userId);

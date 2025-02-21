@@ -12,4 +12,6 @@ public interface UserService {
     void deleteUser(Integer userId);
 
     UserInfo.Image getUserImage(Integer userId);
+
+    void updateUserEmail(UserInfo.Domain domain);
 }

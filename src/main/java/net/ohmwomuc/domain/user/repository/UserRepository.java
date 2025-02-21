@@ -14,4 +14,6 @@ public interface UserRepository {
     void clearUserImage(Integer userId);
 
     UserInfo.Image getUserImage(Integer userId);
+
+    void updateUserEmail(UserInfo.Domain domain);
 }

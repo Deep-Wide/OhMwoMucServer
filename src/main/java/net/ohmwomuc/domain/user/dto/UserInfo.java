@@ -15,6 +15,7 @@ public class UserInfo {
         private String naverKey;
         private String kakaoKey;
         private String googleKey;
+        private String password;
 
         public Response toResponse() {
             return Response.builder()
@@ -23,8 +24,6 @@ public class UserInfo {
                     .email(email)
                     .build();
         }
-
-
     }
 
     @Getter
@@ -36,6 +35,7 @@ public class UserInfo {
         private int id;
         private String nickname;
         private String email;
+        private String password;
 
         public Domain toDomain() {
             return Domain.builder()

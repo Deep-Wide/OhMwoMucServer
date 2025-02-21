@@ -41,4 +41,9 @@ public class UserServiceImpl implements UserService {
     public UserInfo.Image getUserImage(Integer userId) {
         return userRepository.getUserImage(userId);
     }
+
+    @Override
+    public void updateUserEmail(UserInfo.Domain domain) {
+        userRepository.updateUserEmail(domain);
+    }
 }

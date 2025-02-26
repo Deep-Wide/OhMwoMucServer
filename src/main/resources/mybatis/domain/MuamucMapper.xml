@@ -8,11 +8,11 @@
         COALESCE(comment_count, 0) AS comment_count,
         COALESCE(like_count, 0) AS like_count
         <if test="userId != 0">
-        ,
-        CASE
-        WHEN l.user_id is not null then true
-        ELSE false
-        END AS isLiked
+            ,
+            CASE
+            WHEN l.user_id is not null then true
+            ELSE false
+            END AS isLiked
         </if>
         FROM MUAMUC muamuc
 
@@ -21,6 +21,8 @@
         LEFT OUTER JOIN (
         SELECT muamuc_id, COUNT(*) AS comment_count
         FROM COMMENT C
+        WHERE parent_id = 0
+        AND is_del = 0
         GROUP BY muamuc_id
         ) AS C ON muamuc.muamuc_id = C.muamuc_id
 
@@ -44,6 +46,7 @@
             AND (muamuc.title LIKE CONCAT('%', #{searchKeyword}, '%')
             OR muamuc.content LIKE CONCAT('%', #{searchKeyword}, '%'))
         </if>
+        ORDER BY muamuc.created_at DESC
     </select>
 
     <insert id="createMuamuc" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$DomainRequest"
@@ -54,25 +57,24 @@
         VALUES (#{tagId}, #{title}, #{content}, #{writerId})
     </insert>
 
-    <select id="findDomainById" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$MuamucIdUserId" resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
-        <!--        <include refid="findAllDomain"></include>-->
-        SELECT
-        muamuc.*,
-        coalesce(nickname, '탈퇴된 사용자') as writerName,
-        COALESCE(like_count, 0) AS like_count,
-        CASE
-        WHEN l.user_id is not null then true
-        ELSE false
-        END AS isLiked
-        FROM MUAMUC muamuc LEFT OUTER JOIN USER u on writer_id = id
-        LEFT OUTER JOIN (
-        SELECT COUNT(muamuc_id) AS like_count,
-        muamuc_id
-        FROM LIKES L
-        GROUP BY muamuc_id
-        ) AS L ON muamuc.muamuc_id = L.muamuc_id
-        LEFT OUTER JOIN (SELECT muamuc_id, user_id FROM LIKES l
-        where user_id = #{userId}) AS l on L.muamuc_id = l.muamuc_id
+    <select id="findDomainById" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$MuamucIdUserId"
+            resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
+        SELECT muamuc.*,
+               coalesce(nickname, '탈퇴된 사용자') AS writerName,
+               COALESCE(like_count, 0)       AS like_count,
+               CASE
+                   WHEN l.user_id is not null then true
+                   ELSE false
+                   END                       AS isLiked
+        FROM MUAMUC muamuc
+                 LEFT OUTER JOIN USER u on writer_id = id
+                 LEFT OUTER JOIN (SELECT COUNT(muamuc_id) AS like_count,
+                                         muamuc_id
+                                  FROM LIKES L
+                                  GROUP BY muamuc_id) AS L ON muamuc.muamuc_id = L.muamuc_id
+                 LEFT OUTER JOIN (SELECT muamuc_id, user_id
+                                  FROM LIKES l
+                                  where user_id = #{userId}) AS l on L.muamuc_id = l.muamuc_id
         where muamuc.muamuc_id = #{muamucId}
     </select>
 
@@ -109,7 +111,8 @@
     </insert>
 
     <delete id="clearMuamucFiles">
-        DELETE FROM MUAMUC_FILE_MAPPING
+        DELETE
+        FROM MUAMUC_FILE_MAPPING
         WHERE muamuc_id = #{muamucId}
     </delete>
 

@@ -26,7 +26,6 @@ public class MuamucServiceImpl implements MuamucService {
     }
 
     @Override
-    @Transactional
     public Muamuc.Domain addMuamucDomain(Muamuc.Domain muamuc) {
         if (StringUtils.isEmpty(muamuc.getTitle())) {
             throw new IllegalArgumentException("Muamuc title cannot be empty");
@@ -37,7 +36,6 @@ public class MuamucServiceImpl implements MuamucService {
     }
 
     @Override
-    @Transactional
     public Muamuc.Domain updateMuamuc(Muamuc.DomainRequest muamuc) {
         muamucRepository.updateMuamuc(muamuc);
         return muamucRepository.findDomainById(Muamuc.MuamucIdUserId.builder().muamucId(muamuc.getMuamucId()).userId(muamuc.getWriterId()).build());

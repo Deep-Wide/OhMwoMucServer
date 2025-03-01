@@ -6,8 +6,20 @@
             resultType="net.ohmwomuc.domain.user.dto.UserInfo$Domain">
         select id, email, nickname
         from USER
-        where id = #{userId}
+        where id = #{id}
     </select>
+
+    <select id="checkDuplicateEmail" parameterType="java.lang.String" resultType="java.lang.Boolean">
+        SELECT EXISTS (SELECT 1
+                       FROM USER
+                       WHERE email = #{email}) AS result;
+    </select>
+
+    <insert id="createUserInfo" parameterType="net.ohmwomuc.domain.user.dto.UserInfo$Domain"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into USER(password, email, nickname, auth, status, google_key, kakao_key, naver_key)
+        values (#{password}, #{email}, #{nickname}, 1, 0, #{googleKey}, #{kakaoKey}, #{naverKey})
+    </insert>
 
     <select id="getUserImage" parameterType="java.lang.Integer"
             resultType="net.ohmwomuc.domain.user.dto.UserInfo$Image">

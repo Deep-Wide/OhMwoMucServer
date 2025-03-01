@@ -5,6 +5,8 @@ import net.ohmwomuc.domain.user.dto.UserInfo;
 public interface UserService {
     UserInfo.Domain getUserInfo(Integer userId);
 
+    UserInfo.Domain createUser(UserInfo.Domain newUser);
+
     void updateUserNickname(UserInfo.Domain request);
 
     void addUserImage(UserInfo.Image image, Integer userId);
@@ -14,4 +16,6 @@ public interface UserService {
     UserInfo.Image getUserImage(Integer userId);
 
     void updateUserEmail(UserInfo.Domain domain);
+
+    Boolean checkDuplicateEmail(String email);
 }

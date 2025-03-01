@@ -20,6 +20,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserInfo.Domain createUser(UserInfo.Domain newUser) {
+        userRepository.createUserInfo(newUser);
+        return userRepository.getUserInfo(newUser.getId());
+    }
+
+    @Override
     public void updateUserNickname(UserInfo.Domain domain) {
         userRepository.updateUserNickname(domain);
     }
@@ -45,5 +51,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserEmail(UserInfo.Domain domain) {
         userRepository.updateUserEmail(domain);
+    }
+
+    @Override
+    public Boolean checkDuplicateEmail(String email) {
+        return userRepository.checkDuplicateEmail(email);
     }
 }

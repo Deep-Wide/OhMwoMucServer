@@ -5,6 +5,8 @@ import net.ohmwomuc.domain.user.dto.UserInfo;
 public interface UserRepository {
     UserInfo.Domain getUserInfo(Integer userId);
 
+    void createUserInfo(UserInfo.Domain newUser);
+
     void updateUserNickname(UserInfo.Domain domain);
 
     void addUserImage(UserInfo.Image image, Integer userId);
@@ -16,4 +18,6 @@ public interface UserRepository {
     UserInfo.Image getUserImage(Integer userId);
 
     void updateUserEmail(UserInfo.Domain domain);
+
+    Boolean checkDuplicateEmail(String email);
 }

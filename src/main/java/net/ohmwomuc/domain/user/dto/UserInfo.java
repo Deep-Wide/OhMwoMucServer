@@ -22,6 +22,9 @@ public class UserInfo {
                     .id(id)
                     .nickname(nickname)
                     .email(email)
+                    .naverKey(naverKey)
+                    .kakaoKey(kakaoKey)
+                    .googleKey(googleKey)
                     .build();
         }
     }
@@ -35,13 +38,21 @@ public class UserInfo {
         private int id;
         private String nickname;
         private String email;
+        private String naverKey;
+        private String kakaoKey;
+        private String googleKey;
         private String password;
+
 
         public Domain toDomain() {
             return Domain.builder()
                     .id(id)
                     .nickname(nickname)
                     .email(email)
+                    .naverKey(naverKey)
+                    .kakaoKey(kakaoKey)
+                    .googleKey(googleKey)
+                    .password(password)
                     .build();
         }
     }
@@ -55,6 +66,9 @@ public class UserInfo {
         private int id;
         private String nickname;
         private String email;
+        private String naverKey;
+        private String kakaoKey;
+        private String googleKey;
     }
 
     @Getter
@@ -63,7 +77,7 @@ public class UserInfo {
     @NoArgsConstructor
     @Builder
     public static class Image {
-        private int userId;
+        private int id;
         private int fileId;
         private String uniqueFileName;
         private String fileName;

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.ohmwomuc.domain.user.dto.UserInfo;
 import net.ohmwomuc.domain.user.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
@@ -19,11 +20,33 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserInfo.Response> getUserInfo(@PathVariable Integer userId) {
         UserInfo.Domain result = userService.getUserInfo(userId);
         return ResponseEntity.ok(result.toResponse());
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Boolean> checkDuplicateEmail(@PathVariable String email) {
+        Boolean result = userService.checkDuplicateEmail(email);
+        return ResponseEntity.ok(!result);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<UserInfo.Response> createUser(@RequestBody UserInfo.Request userInfo) {
+
+        String BCryptedPassword = passwordEncoder.encode(userInfo.getPassword());
+
+        UserInfo.Domain newUser = UserInfo.Domain.builder()
+                .email(userInfo.getEmail())
+                .password(BCryptedPassword)
+                .nickname(userInfo.getNickname())
+                .build();
+        UserInfo.Response result = userService.createUser(newUser).toResponse();
+
+        return ResponseEntity.ok(result);
     }
 
     @PatchMapping("/{userId}/nickname")

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.domain.comment.repository.CommentMapper">
+    <select id="getCommentListByMuamucId" parameterType="int"
+            resultType="net.ohmwomuc.domain.comment.dto.Comment$Domain">
+        SELECT c.comment_id,
+               c.user_id,
+               coalesce(u.nickname, '탈퇴한 사용자') as writerName,
+               c.parent_id,
+               c.comment_text,
+               c.created_at,
+               c.updated_at,
+               c.is_del,
+               c.muamuc_id
+        FROM COMMENT c
+                 LEFT JOIN COMMENT p ON c.parent_id = p.comment_id
+                 INNER JOIN USER u on c.user_id = u.id
+        WHERE c.muamuc_id = #{muamucId} AND c.is_del = 0
+        ORDER BY p.comment_id IS NULL DESC,
+                 c.created_at
+    </select>
+
+    <insert id="createComment" parameterType="net.ohmwomuc.domain.comment.dto.Comment$DomainRequest"
+            useGeneratedKeys="true"
+            keyProperty="commentId">
+        insert into COMMENT
+            (user_id, parent_id, muamuc_id, comment_text)
+        VALUES (#{userId}, #{parentId}, #{muamucId}, #{commentText})
+    </insert>
+
+    <select id="findCommentByCommentId" parameterType="int" resultType="net.ohmwomuc.domain.comment.dto.Comment$Domain">
+        SELECT
+            c.*,
+            coalesce(nickname, '탈퇴한 사용자') as writerName
+        FROM COMMENT c LEFT OUTER JOIN USER u on user_id = id
+        where c.comment_id = #{commentId}
+    </select>
+
+    <update id="updateComment" parameterType="net.ohmwomuc.domain.comment.dto.Comment$DomainRequest">
+        update COMMENT
+        SET comment_text = #{commentText}
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <update id="deleteComment" parameterType="int">
+        update COMMENT
+        Set deleted_at = CURRENT_TIMESTAMP,
+            is_del = true
+        Where comment_id = #{commentId}
+    </update>
+
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.domain.report.repository.ReportMapper">
+    <insert id="addReport" parameterType="net.ohmwomuc.domain.report.dto.Report$Domain"
+        useGeneratedKeys="true"
+        keyProperty="reportId">
+        INSERT INTO REPORT (muamuc_id, comment_id, reporter_user_id, reported_user_id, reason_id, detail)
+            VALUES (#{muamucId}, #{commentId}, #{reporterUserId}, #{reportedUserId}, #{reasonId}, #{detail})
+    </insert>
+
+    <select id="findReport" parameterType="int">
+        SELECT *
+        FROM REPORT
+        WHERE report_id = #{reportId}
+    </select>
+</mapper>

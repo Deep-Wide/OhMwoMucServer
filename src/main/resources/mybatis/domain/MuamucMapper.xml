@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.domain.muamuc.repository.MuamucMapper">
+    <select id="findAllDomain" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Condition"
+            resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
+        SELECT muamuc.*,
+        COALESCE(u.nickname, '탈퇴된 사용자') AS writerName,
+        COALESCE(comment_count, 0) AS comment_count,
+        COALESCE(like_count, 0) AS like_count
+        <if test="userId != 0">
+            ,
+            CASE
+            WHEN l.user_id is not null then true
+            ELSE false
+            END AS isLiked
+        </if>
+        FROM MUAMUC muamuc
+
+        LEFT OUTER JOIN USER u ON muamuc.writer_id = u.id
+
+        LEFT OUTER JOIN (
+        SELECT muamuc_id, COUNT(*) AS comment_count
+        FROM COMMENT C
+        WHERE parent_id = 0
+        AND is_del = 0
+        GROUP BY muamuc_id
+        ) AS C ON muamuc.muamuc_id = C.muamuc_id
+
+        LEFT OUTER JOIN (
+        SELECT COUNT(muamuc_id) AS like_count,
+        muamuc_id
+        FROM LIKES L
+        GROUP BY muamuc_id
+        ) AS L ON muamuc.muamuc_id = L.muamuc_id
+
+        <if test="userId != 0">
+            LEFT OUTER JOIN
+            (select user_id,
+            muamuc_id
+            from LIKES
+            WHERE user_id = #{userId}) AS l on muamuc.muamuc_id = l.muamuc_id
+        </if>
+        WHERE muamuc.tag_id = #{id}
+        AND muamuc.is_del = 0
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (muamuc.title LIKE CONCAT('%', #{searchKeyword}, '%')
+            OR muamuc.content LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        ORDER BY muamuc.created_at DESC
+    </select>
+
+    <insert id="createMuamuc" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$DomainRequest"
+            useGeneratedKeys="true"
+            keyProperty="muamucId">
+        insert into MUAMUC
+            (tag_id, title, content, writer_id)
+        VALUES (#{tagId}, #{title}, #{content}, #{writerId})
+    </insert>
+
+    <select id="findDomainById" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$MuamucIdUserId"
+            resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
+        SELECT muamuc.*,
+               coalesce(nickname, '탈퇴된 사용자') AS writerName,
+               COALESCE(like_count, 0)       AS like_count,
+               CASE
+                   WHEN l.user_id is not null then true
+                   ELSE false
+                   END                       AS isLiked
+        FROM MUAMUC muamuc
+                 LEFT OUTER JOIN USER u on writer_id = id
+                 LEFT OUTER JOIN (SELECT COUNT(muamuc_id) AS like_count,
+                                         muamuc_id
+                                  FROM LIKES L
+                                  GROUP BY muamuc_id) AS L ON muamuc.muamuc_id = L.muamuc_id
+                 LEFT OUTER JOIN (SELECT muamuc_id, user_id
+                                  FROM LIKES l
+                                  where user_id = #{userId}) AS l on L.muamuc_id = l.muamuc_id
+        where muamuc.muamuc_id = #{muamucId}
+    </select>
+
+    <update id="updateMuamuc" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$DomainRequest">
+        update MUAMUC
+        SET title   = #{title},
+            tag_id  = #{tagId},
+            content = #{content}
+        WHERE muamuc_id = #{muamucId}
+    </update>
+
+    <update id="deleteMuamuc" parameterType="java.lang.Integer">
+        update MUAMUC
+        Set deleted_at = CURRENT_TIMESTAMP,
+            is_del     = true
+        Where muamuc_id = #{id}
+    </update>
+
+    <select id="getMuamucFileList" resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$File" parameterType="int">
+        select f.file_id,
+               f.sys_file_name as uniqueFileName,
+               f.file_name,
+               mf.muamuc_id
+        from FILE f
+                 INNER JOIN MUAMUC_FILE_MAPPING mf on f.file_id = mf.file_id
+        where mf.muamuc_id = #{muamucId}
+    </select>
+
+    <insert id="addMuamucFiles" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$File">
+        insert into MUAMUC_FILE_MAPPING(file_id, muamuc_id)
+        <foreach collection="list" item="file" open="values" separator=",">
+            (#{file.fileId}, #{file.muamucId})
+        </foreach>
+    </insert>
+
+    <delete id="clearMuamucFiles">
+        DELETE
+        FROM MUAMUC_FILE_MAPPING
+        WHERE muamuc_id = #{muamucId}
+    </delete>
+
+
+</mapper>

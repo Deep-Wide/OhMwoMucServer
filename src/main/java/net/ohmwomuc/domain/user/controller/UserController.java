@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import net.ohmwomuc.domain.user.dto.UserInfo;
 import net.ohmwomuc.domain.user.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,12 @@ public class UserController {
     public ResponseEntity<UserInfo.Response> getUserInfo(@PathVariable Integer userId) {
         UserInfo.Domain result = userService.getUserInfo(userId);
         return ResponseEntity.ok(result.toResponse());
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUserInfo(@PathVariable Integer userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/email/{email}")
@@ -83,12 +90,6 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         userService.addUserImage(image, userId);
         return ResponseEntity.status(CREATED).build();
-    }
-
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer userId) {
-        userService.deleteUser(userId);
-        return ResponseEntity.status(NO_CONTENT).build();
     }
 
 }

@@ -9,6 +9,13 @@
         where id = #{id}
     </select>
 
+    <update id="deleteUser" parameterType="int">
+        update USER
+            SET status = 1,
+                delete_dt = CURRENT_TIMESTAMP
+        where id = #{id}
+    </update>
+
     <select id="checkDuplicateEmail" parameterType="java.lang.String" resultType="java.lang.Boolean">
         SELECT EXISTS (SELECT 1
                        FROM USER

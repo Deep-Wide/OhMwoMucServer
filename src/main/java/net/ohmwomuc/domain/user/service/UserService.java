@@ -18,4 +18,5 @@ public interface UserService {
     void updateUserEmail(UserInfo.Domain domain);
 
     Boolean checkDuplicateEmail(String email);
+
 }

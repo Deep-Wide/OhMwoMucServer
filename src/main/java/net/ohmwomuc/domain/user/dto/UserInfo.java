@@ -1,8 +1,12 @@
 package net.ohmwomuc.domain.user.dto;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Set;
 
 public class UserInfo {
+
     @Getter
     @Setter
     @AllArgsConstructor
@@ -16,6 +20,7 @@ public class UserInfo {
         private String kakaoKey;
         private String googleKey;
         private String password;
+        private Set<GrantedAuthority> role;
 
         public Response toResponse() {
             return Response.builder()
@@ -25,6 +30,7 @@ public class UserInfo {
                     .naverKey(naverKey)
                     .kakaoKey(kakaoKey)
                     .googleKey(googleKey)
+                    .role(role)
                     .build();
         }
     }
@@ -42,7 +48,7 @@ public class UserInfo {
         private String kakaoKey;
         private String googleKey;
         private String password;
-
+        private Set<GrantedAuthority> role;
 
         public Domain toDomain() {
             return Domain.builder()
@@ -53,6 +59,7 @@ public class UserInfo {
                     .kakaoKey(kakaoKey)
                     .googleKey(googleKey)
                     .password(password)
+                    .role(role)
                     .build();
         }
     }
@@ -69,6 +76,7 @@ public class UserInfo {
         private String naverKey;
         private String kakaoKey;
         private String googleKey;
+        private Set<GrantedAuthority> role;
     }
 
     @Getter

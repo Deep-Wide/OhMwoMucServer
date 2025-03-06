@@ -14,6 +14,34 @@ logging:
   level:
     root: debug
 
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ENC(Gz7zpvZ/5JW3GROYRSFsBt3LttjAVoJCitsEYfJrZ5Zl+7VR2e5jdmZBzR/OB0lhoTtfB9W+MMU8hKJOHb2LKWT/7EIEhqmuiHTfuM9J35m9MM/DHF/15QC6ukm9X4Sp)
+            client-secret: ENC(aJjvPGOcv4PxIsZGp8ZPuUrNjL9Vrk0t7aWxtlfedY9vMlzL5QJmnf0P8HEASgT7R2GkK1fT+/A=)
+            scope:
+              - email
+              - profile
+            redirect-uri: "{baseUrl}/api/oauth2/{registrationId}/callback"
+          kakao:
+            authorization-grant-type: authorization_code
+            client-id: ENC(d5v5WqwPBjYwm+QNZIC/mn7u73gCUkzKTrGajMTxmG4ed5wP5HLb3tlF/3WUfiTtS58rO2CsMaU=)
+            client-secret: ENC(FfdIQ52wGN06EOSlih2FkbpUf9FhtN0NL3h4BnL7AUL4A2MPmpGpsxpblOiqfMvYd7hOULNVWJE=)
+            scope:
+              - profile_nickname
+            redirect-uri: "{baseUrl}/api/oauth2/{registrationId}/callback"
+            client-name: kakao
+            client-authentication-method: client_secret_post
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            user-name-attribute: id
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+
 files:
   uploaded-path: /Users/bean/Development/OhMwoMuc/OhMwoMucFiles
 

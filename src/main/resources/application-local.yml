@@ -10,3 +10,6 @@ spring:
 server:
   log:
     path: /Users/bean/Development/OhMwoMuk/OhMwoMucServer/logs
+
+oauth2:
+  client-host: http://localhost:5173

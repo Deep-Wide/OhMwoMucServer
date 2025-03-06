@@ -4,7 +4,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import net.ohmwomuc.core.exception.CustomExceptionHandler;
 import net.ohmwomuc.core.security.filter.JwtAuthenticationFilter;
 import net.ohmwomuc.core.security.filter.JwtVerifyFilter;
+import net.ohmwomuc.core.security.oauth2.CustomOauth2SuccessHandler;
 import net.ohmwomuc.core.security.service.JwtService;
+import net.ohmwomuc.core.security.service.SecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,6 +46,7 @@ public class SecurityConfig {
             "/api/files/**",
             "/api/users/**",
             "/api/report/title",
+            "/api/oauth2/**",
             "/swagger-ui/**",
             "/v3/api-docs/**"
     );
@@ -51,13 +54,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            JwtAuthenticationFilter jwtAuthenticationFilter,
-                                           JwtVerifyFilter jwtVerifyFilter
-                                           ) throws Exception {
+                                           JwtVerifyFilter jwtVerifyFilter,
+                                           CustomOauth2SuccessHandler customOauth2SuccessHandler
+    ) throws Exception {
         http.authorizeHttpRequests(auth -> auth.requestMatchers(allowedRequestUrlList.toArray(String[]::new))
                         .permitAll()
                         .anyRequest()
                         .authenticated())
                 .formLogin(formLogin -> formLogin.disable())
+                .oauth2Login(oath2 -> oath2.authorizationEndpoint(authorizationEndpointConfig -> authorizationEndpointConfig.baseUri("/api/oauth2/authorization")
+                        ).redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/oauth2/*/callback"))
+                        .successHandler(customOauth2SuccessHandler))
                 .addFilterAt(jwtVerifyFilter, BasicAuthenticationFilter.class)
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .csrf(csrf -> csrf.disable())
@@ -72,8 +79,14 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CustomOauth2SuccessHandler customOauth2SuccessHandler(SecurityService securityService, JwtService jwtService) {
+        return new CustomOauth2SuccessHandler(securityService, jwtService);
+    }
+
+
+    @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
-       return new JwtAuthenticationFilter(authenticationManager, jwtService);
+        return new JwtAuthenticationFilter(authenticationManager, jwtService);
     }
 
     private LogoutSuccessHandler getLogoutSuccessHandler() {

@@ -47,6 +47,9 @@ public class User {
     @Builder
     public static class UserAccountInfo implements UserDetails {
         private int id;
+        private String googleKey;
+        private String kakaoKey;
+        private String naverKey;
         private String email;
         private String password;
         private String nickname;

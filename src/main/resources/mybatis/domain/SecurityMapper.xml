@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.ohmwomuc.core.security.repository.SecurityMapper">
+
+    <insert id="createUser" parameterType="net.ohmwomuc.core.security.dto.User$UserAccountInfo"
+    useGeneratedKeys="true"
+    keyProperty="id">
+        insert into USER(password, email, nickname, auth, status, google_key, kakao_key, naver_key)
+        values (#{password}, #{email}, #{nickname}, 1, 0, #{googleKey}, #{kakaoKey}, #{naverKey})
+    </insert>
+
+    <select id="findUserByUsername" parameterType="java.lang.String"
+            resultType="net.ohmwomuc.core.security.dto.User$UserAccountInfo">
+        select
+            id,
+            email,
+            nickname,
+            password,
+            auth as role
+        from USER
+        where (google_key = #{username}
+            or kakao_key = #{username}
+            or email = #{username})
+          and status = 0
+    </select>
+
     <select id="findUserByEmail" parameterType="java.lang.String"
             resultType="net.ohmwomuc.core.security.dto.User$UserAccountInfo">
         select
@@ -11,6 +34,20 @@
             auth as role
         from USER
         where email = #{email} and status = 0
+    </select>
+
+    <select id="findUserByGoogleKey" parameterType="java.lang.String"
+            resultType="net.ohmwomuc.core.security.dto.User$UserAccountInfo">
+        select *
+        from USER
+        where google_key = #{googleKey}
+    </select>
+
+    <select id="findUserByKakaoKey" parameterType="java.lang.String"
+            resultType="net.ohmwomuc.core.security.dto.User$UserAccountInfo">
+        select *
+        from USER
+        where kakao_key = #{kakaoKey}
     </select>
 
 </mapper>

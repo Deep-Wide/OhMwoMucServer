@@ -53,8 +53,8 @@
             useGeneratedKeys="true"
             keyProperty="muamucId">
         insert into MUAMUC
-            (tag_id, title, content, writer_id)
-        VALUES (#{tagId}, #{title}, #{content}, #{writerId})
+            (tag_id, title, content, writer_id, restaurant_id)
+        VALUES (#{tagId}, #{title}, #{content}, #{writerId}, #{restaurantId})
     </insert>
 
     <select id="findDomainById" parameterType="net.ohmwomuc.domain.muamuc.dto.Muamuc$MuamucIdUserId"
@@ -115,6 +115,5 @@
         FROM MUAMUC_FILE_MAPPING
         WHERE muamuc_id = #{muamucId}
     </delete>
-
 
 </mapper>

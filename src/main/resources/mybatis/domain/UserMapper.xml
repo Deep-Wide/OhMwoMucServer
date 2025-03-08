@@ -33,10 +33,10 @@
         select F.file_id,
                F.file_name,
                F.sys_file_name as uniqueFileName,
-               UFM.user_id
+               UFM.user_id as id
         from FILE F
                  INNER JOIN USER_FILE_MAPPING UFM on F.file_id = UFM.file_id
-        where UFM.user_id = #{userId}
+        where UFM.user_id = #{id}
     </select>
 
     <update id="updateUserNickname" parameterType="net.ohmwomuc.domain.user.dto.UserInfo$Domain">
@@ -53,7 +53,7 @@
 
     <insert id="addUserImage" parameterType="net.ohmwomuc.domain.user.dto.UserInfo$Image">
         insert into USER_FILE_MAPPING(file_id, user_id)
-        values (#{image.fileId}, #{image.userId})
+        values (#{fileId}, #{id})
     </insert>
 
     <delete id="clearUserImage" parameterType="java.lang.Integer">

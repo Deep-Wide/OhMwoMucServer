@@ -35,7 +35,8 @@ public class UserServiceImpl implements UserService {
     public void addUserImage(UserInfo.Image image, Integer userId) {
         if (Objects.nonNull(userRepository.getUserImage(userId)))
             userRepository.clearUserImage(userId);
-        userRepository.addUserImage(image, userId);
+        image.setId(userId);
+        userRepository.addUserImage(image);
     }
 
     @Override

@@ -9,7 +9,7 @@ public interface UserRepository {
 
     void updateUserNickname(UserInfo.Domain domain);
 
-    void addUserImage(UserInfo.Image image, Integer userId);
+    void addUserImage(UserInfo.Image image);
 
     void deleteUser(Integer userId);
 

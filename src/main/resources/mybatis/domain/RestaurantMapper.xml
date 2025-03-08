@@ -40,27 +40,35 @@
 
     <select id="getRestaurantList" resultMap="RestaurantResultMap"
             parameterType="net.ohmwomuc.domain.restaurant.dto.Restaurant$Condition">
-        SELECT
-        r.restaurant_id, r.name, r.category_id, r.lat, r.lng, r.open_time_type,
-        r.tel, r.zip_code, r.create_at, r.update_at,
-        ot.day AS open_day, ot.start_time, ot.end_time,
-        m.name AS menu_name, m.price, m.seq
+        SELECT r.restaurant_id,
+        r.name,
+        r.category_id,
+        r.lat,
+        r.lng,
+        r.open_time_type,
+        r.tel,
+        r.zip_code,
+        r.create_at,
+        r.update_at,
+        r.address,
+        ot.day AS open_day,
+        ot.start_time,
+        ot.end_time,
+        m.name AS menu_name,
+        m.price,
+        m.seq,
+        f.file_id,
+        f.sys_file_name,
+        f.file_name
         FROM RESTAURANT r
         LEFT OUTER JOIN RESTAURANT_OPEN_TIME ot ON r.restaurant_id = ot.restaurant_id
         LEFT OUTER JOIN RESTAURANT_MENU m ON r.restaurant_id = m.restaurant_id
+        LEFT OUTER JOIN RESTAURANT_FILE_MAPPING rf ON r.restaurant_id = rf.restaurant_id
+        LEFT OUTER JOIN FILE f ON rf.file_id = f.file_id
         WHERE 1=1
 
-        <if test="name != null">
-            AND r.name LIKE CONCAT('%', #{name}, '%')
-        </if>
-
-        <if test="categoryId != null">
-            AND r.category_id = #{categoryId}
-        </if>
-
-        <if test="lat != null and lng != null">
-            AND r.lat BETWEEN #{lat} - 0.1 AND #{lat} + 0.1
-            AND r.lng BETWEEN #{lng} - 0.1 AND #{lng} + 0.1
+        <if test="searchKeyword != null">
+            AND r.name LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
 
         ORDER BY r.create_at DESC

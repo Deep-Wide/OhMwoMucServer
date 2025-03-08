@@ -112,6 +112,7 @@ public class Muamuc {
         @Schema(description = "작성자 닉네임")
         private String writerName;
 
+
         public void setTagId(int tagId) {
             this.muamucTag = MuamucTag.getById(tagId).get();
         }

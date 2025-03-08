@@ -171,6 +171,6 @@ public class Restaurant {
     public static class Condition {
         private double lat;
         private double lng;
-        private String name;
+        private String searchKeyword;
     }
 }

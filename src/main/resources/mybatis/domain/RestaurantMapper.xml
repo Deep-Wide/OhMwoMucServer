@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.domain.restaurant.repository.RestaurantMapper">
+
+    <resultMap id="RestaurantResultMap" type="net.ohmwomuc.domain.restaurant.dto.Restaurant$Domain">
+        <id property="restaurantId" column="restaurant_id"/>
+        <result property="name" column="name"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="lat" column="lat"/>
+        <result property="lng" column="lng"/>
+        <result property="openTimeType" column="open_time_type"/>
+        <result property="tel" column="tel"/>
+        <result property="zoneCode" column="zip_code"/>
+        <result property="createdAt" column="create_at"/>
+        <result property="updatedAt" column="update_at"/>
+
+        <collection property="openTimeList" ofType="net.ohmwomuc.domain.restaurant.dto.Restaurant$OpenTime">
+            <result property="day" column="open_day"/>
+            <result property="startTime" column="start_time"/>
+            <result property="endTime" column="end_time"/>
+        </collection>
+
+        <collection property="menuList" ofType="net.ohmwomuc.domain.restaurant.dto.Restaurant$Menu">
+            <result property="name" column="name"/>
+            <result property="price" column="price"/>
+        </collection>
+    </resultMap>
+
+    <select id="getRestaurantList" resultMap="RestaurantResultMap"
+            parameterType="net.ohmwomuc.domain.restaurant.dto.Restaurant$Condition">
+        SELECT
+        r.restaurant_id, r.name, r.category_id, r.lat, r.lng, r.open_time_type,
+        r.tel, r.zip_code, r.create_at, r.update_at,
+        ot.day AS open_day, ot.start_time, ot.end_time,
+        m.name AS menu_name, m.price
+        FROM RESTAURANT r
+        LEFT JOIN RESTAURANT_OPEN_TIME ot ON r.restaurant_id = ot.restaurant_id
+        LEFT JOIN RESTAURANT_MENU m ON r.restaurant_id = m.restaurant_id
+        WHERE 1=1
+
+        <if test="name != null">
+            AND r.name LIKE CONCAT('%', #{name}, '%')
+        </if>
+
+        <if test="categoryId != null">
+            AND r.category_id = #{categoryId}
+        </if>
+
+        <if test="lat != null and lng != null">
+            AND r.lat BETWEEN #{lat} - 0.1 AND #{lat} + 0.1
+            AND r.lng BETWEEN #{lng} - 0.1 AND #{lng} + 0.1
+        </if>
+
+        ORDER BY r.create_at DESC
+    </select>
+
+    <insert id="createRestaurantInfo" parameterType="net.ohmwomuc.domain.restaurant.dto.Restaurant$Domain"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into RESTAURANT(name, tel, address, category_id, lat, lng, open_time_type, writer_id, zip_code)
+        values (#{name}, #{tel}, #{address}, #{categoryId}, #{lat}, #{lng}, #{openTimeType}, #{writerId}, #{zipCode})
+    </insert>
+
+    <insert id="addRestaurantOpenTime" parameterType="java.util.List">
+        insert into RESTAURANT_OPEN_TIME(restaurant_id, open_time_type, day, start_time, end_time)
+            values 
+                <foreach collection="openTimeList" item="openTime" separator=",">
+                    (#{restaurantId}, #{openTimeType}, #{day}, #{startTime}, #{endTime})
+                </foreach>
+    </insert>
+
+    <insert id="addRestaurantMenu" parameterType="java.util.List">
+        insert into RESTAURANT_MENU(restaurant_id, name, price)
+        values
+        <foreach collection="menuList" item="menu" separator=",">
+            (#{restaurantId}, #{name}, #{price})
+        </foreach>
+    </insert>
+    
+    <select id="getRestaurantMenuImages" parameterType="java.lang.Integer" resultType="net.ohmwomuc.domain.restaurant.dto.Restaurant$File">
+        select f.file_id,
+               f.sys_file_name as uniqueFileName,
+               f.file_name,
+               mr.restaurant_id
+        from FILE f
+                 INNER JOIN RESTAURANT_FILE_MAPPING rf on f.file_id = rf.file_id
+        where rf.restaurant_id = #{rastaurantId}
+    </select>
+
+    <insert id="addRestaurantImages" parameterType="java.util.List">
+        insert into RESTAURNAT_FILE_MAPPING(file_id, restaurant_id)
+        <foreach collection="list" item="image" open="values" separator=",">
+            (#{image.fileId}, #{image.retaurantId})
+        </foreach>
+    </insert>
+    
+</mapper>

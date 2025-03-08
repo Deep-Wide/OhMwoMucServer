@@ -1,6 +1,7 @@
 package net.ohmwomuc.domain.restaurant.service;
 
 import lombok.RequiredArgsConstructor;
+import net.ohmwomuc.core.security.service.SecurityService;
 import net.ohmwomuc.domain.restaurant.dto.Restaurant;
 import net.ohmwomuc.domain.restaurant.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
@@ -23,27 +24,31 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional
     public Restaurant.Domain createRestaurant(Restaurant.Domain restaurantInfo) {
 
-        restaurantInfo.setOpenTimeList(
-                restaurantInfo.getOpenTimeList().stream()
-                        .map(openTime -> {
-                            openTime.setRestaurantId(restaurantInfo.getRestaurantId());
-                            openTime.setOpenTimeType(restaurantInfo.getOpenTimeType());
-                            return openTime;
-                        }).toList()
-        );
-
-        restaurantInfo.setMenuList(
-                restaurantInfo.getMenuList().stream()
-                        .map(menu -> {
-                            menu.setRestaurantId(restaurantInfo.getRestaurantId());
-                            return menu;
-                        })
-                        .toList()
-        );
-
         restaurantRepository.createRestaurantInfo(restaurantInfo);
-        restaurantRepository.addRestaurantOpenTime(restaurantInfo.getOpenTimeList());
-        restaurantRepository.addRestaurantMenu(restaurantInfo.getMenuList());
+
+        restaurantInfo.getOpenTimeList().forEach(openTime -> {
+            openTime.setRestaurantId(restaurantInfo.getRestaurantId());
+            openTime.setOpenTimeType(restaurantInfo.getOpenTimeType());
+        });
+
+        restaurantInfo.getMenuList().forEach(menu -> {
+            menu.setRestaurantId(restaurantInfo.getRestaurantId());
+        });
+
+        restaurantInfo.getMenuImageList().forEach(menuImage -> {
+            menuImage.setRestaurantId(restaurantInfo.getRestaurantId());
+        });
+
+        if (!restaurantInfo.getOpenTimeList().isEmpty()) {
+            restaurantRepository.addRestaurantOpenTime(restaurantInfo.getOpenTimeList());
+        }
+        if (!restaurantInfo.getMenuList().isEmpty()) {
+            restaurantRepository.addRestaurantMenu(restaurantInfo.getMenuList());
+        }
+        if (!restaurantInfo.getMenuImageList().isEmpty()) {
+            restaurantRepository.addRestaurantImages(restaurantInfo.getMenuImageList());
+        }
+
         return restaurantRepository.getRestaurantInfo(restaurantInfo.getRestaurantId());
     }
 

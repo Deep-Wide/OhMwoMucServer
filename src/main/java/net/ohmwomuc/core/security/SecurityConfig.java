@@ -46,6 +46,8 @@ public class SecurityConfig {
             "/api/files/**",
             "/api/users/**",
             "/api/report/title",
+            "/api/restaurant/*/images",
+            "/api/restaurant/*",
             "/api/oauth2/**",
             "/swagger-ui/**",
             "/v3/api-docs/**"

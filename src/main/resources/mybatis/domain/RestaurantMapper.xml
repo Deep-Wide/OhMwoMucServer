@@ -10,19 +10,31 @@
         <result property="lng" column="lng"/>
         <result property="openTimeType" column="open_time_type"/>
         <result property="tel" column="tel"/>
-        <result property="zoneCode" column="zip_code"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="address" column="address"/>
         <result property="createdAt" column="create_at"/>
         <result property="updatedAt" column="update_at"/>
 
         <collection property="openTimeList" ofType="net.ohmwomuc.domain.restaurant.dto.Restaurant$OpenTime">
+            <result property="restaurantId" column="restaurant_id"/>
+            <result property="openTimeType" column="open_time_type"/>
             <result property="day" column="open_day"/>
             <result property="startTime" column="start_time"/>
             <result property="endTime" column="end_time"/>
         </collection>
 
         <collection property="menuList" ofType="net.ohmwomuc.domain.restaurant.dto.Restaurant$Menu">
-            <result property="name" column="name"/>
+            <result property="restaurantId" column="restaurant_id"/>
+            <result property="name" column="menu_name"/>
             <result property="price" column="price"/>
+            <result property="seq" column="seq"/>
+        </collection>
+
+        <collection property="menuImageList" ofType="net.ohmwomuc.domain.restaurant.dto.Restaurant$File">
+            <result property="restaurantId" column="restaurant_id"/>
+            <result property="fileId" column="file_id"/>
+            <result property="uniqueFileName" column="sys_file_name"/>
+            <result property="fileName" column="file_name"/>
         </collection>
     </resultMap>
 
@@ -32,10 +44,10 @@
         r.restaurant_id, r.name, r.category_id, r.lat, r.lng, r.open_time_type,
         r.tel, r.zip_code, r.create_at, r.update_at,
         ot.day AS open_day, ot.start_time, ot.end_time,
-        m.name AS menu_name, m.price
+        m.name AS menu_name, m.price, m.seq
         FROM RESTAURANT r
-        LEFT JOIN RESTAURANT_OPEN_TIME ot ON r.restaurant_id = ot.restaurant_id
-        LEFT JOIN RESTAURANT_MENU m ON r.restaurant_id = m.restaurant_id
+        LEFT OUTER JOIN RESTAURANT_OPEN_TIME ot ON r.restaurant_id = ot.restaurant_id
+        LEFT OUTER JOIN RESTAURANT_MENU m ON r.restaurant_id = m.restaurant_id
         WHERE 1=1
 
         <if test="name != null">
@@ -55,42 +67,73 @@
     </select>
 
     <insert id="createRestaurantInfo" parameterType="net.ohmwomuc.domain.restaurant.dto.Restaurant$Domain"
-            useGeneratedKeys="true" keyProperty="id">
+            useGeneratedKeys="true" keyProperty="restaurantId">
         insert into RESTAURANT(name, tel, address, category_id, lat, lng, open_time_type, writer_id, zip_code)
         values (#{name}, #{tel}, #{address}, #{categoryId}, #{lat}, #{lng}, #{openTimeType}, #{writerId}, #{zipCode})
     </insert>
 
+    <select id="getRestaurantInfo" parameterType="java.lang.Integer" resultMap="RestaurantResultMap">
+        SELECT r.restaurant_id,
+               r.name,
+               r.category_id,
+               r.lat,
+               r.lng,
+               r.open_time_type,
+               r.tel,
+               r.zip_code,
+               r.create_at,
+               r.update_at,
+               r.address,
+               ot.day AS open_day,
+               ot.start_time,
+               ot.end_time,
+               m.name AS menu_name,
+               m.price,
+               m.seq,
+               f.file_id,
+               f.sys_file_name,
+               f.file_name
+        FROM RESTAURANT r
+                 LEFT OUTER JOIN RESTAURANT_OPEN_TIME ot ON r.restaurant_id = ot.restaurant_id
+                 LEFT OUTER JOIN RESTAURANT_MENU m ON r.restaurant_id = m.restaurant_id
+                 LEFT OUTER JOIN RESTAURANT_FILE_MAPPING rf ON r.restaurant_id = rf.restaurant_id
+                 LEFT OUTER JOIN FILE f ON rf.file_id = f.file_id
+        WHERE r.restaurant_id = #{restaurantId}
+    </select>
+
     <insert id="addRestaurantOpenTime" parameterType="java.util.List">
         insert into RESTAURANT_OPEN_TIME(restaurant_id, open_time_type, day, start_time, end_time)
-            values 
-                <foreach collection="openTimeList" item="openTime" separator=",">
-                    (#{restaurantId}, #{openTimeType}, #{day}, #{startTime}, #{endTime})
-                </foreach>
+        values
+        <foreach collection="openTimeList" item="openTime" separator=",">
+            (#{openTime.restaurantId}, #{openTime.openTimeType}, #{openTime.day}, #{openTime.startTime},
+            #{openTime.endTime})
+        </foreach>
     </insert>
 
     <insert id="addRestaurantMenu" parameterType="java.util.List">
-        insert into RESTAURANT_MENU(restaurant_id, name, price)
+        insert into RESTAURANT_MENU(restaurant_id, name, price, seq)
         values
         <foreach collection="menuList" item="menu" separator=",">
-            (#{restaurantId}, #{name}, #{price})
+            (#{menu.restaurantId}, #{menu.name}, #{menu.price}, #{menu.seq})
         </foreach>
     </insert>
-    
-    <select id="getRestaurantMenuImages" parameterType="java.lang.Integer" resultType="net.ohmwomuc.domain.restaurant.dto.Restaurant$File">
+
+    <select id="getRestaurantMenuImages" parameterType="java.lang.Integer"
+            resultType="net.ohmwomuc.domain.restaurant.dto.Restaurant$File">
         select f.file_id,
                f.sys_file_name as uniqueFileName,
                f.file_name,
                mr.restaurant_id
         from FILE f
                  INNER JOIN RESTAURANT_FILE_MAPPING rf on f.file_id = rf.file_id
-        where rf.restaurant_id = #{rastaurantId}
+        where rf.restaurant_id = #{restaurantId}
     </select>
 
     <insert id="addRestaurantImages" parameterType="java.util.List">
-        insert into RESTAURNAT_FILE_MAPPING(file_id, restaurant_id)
+        insert into RESTAURANT_FILE_MAPPING(file_id, restaurant_id)
         <foreach collection="list" item="image" open="values" separator=",">
-            (#{image.fileId}, #{image.retaurantId})
+            (#{image.fileId}, #{image.restaurantId})
         </foreach>
     </insert>
-    
+
 </mapper>

@@ -20,6 +20,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
+    private final SecurityService securityService;
 
     @GetMapping("")
     @Operation(summary = "Restaurant 목록 조회")
@@ -34,6 +35,7 @@ public class RestaurantController {
     @PostMapping("")
     @Operation(summary = "Restaurant 추가")
     public ResponseEntity<Restaurant.DomainResponse> createRestaurant(@RequestBody Restaurant.DomainRequest restaurantInfo) {
+        restaurantInfo.setWriterId(securityService.getLoginUser().get().getId());
         Restaurant.DomainResponse response = restaurantService.createRestaurant(restaurantInfo.toDomain()).toResponse();
 
         return ResponseEntity.status(CREATED).body(response);

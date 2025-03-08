@@ -1,9 +1,11 @@
 package net.ohmwomuc.domain.restaurant.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public class Restaurant {
@@ -14,16 +16,18 @@ public class Restaurant {
     @AllArgsConstructor
     @Builder
     public static class Domain {
-        int restaurantId;
-        String name;
-        int categoryId;
-        double lat;
-        double lng;
-        List<OpenTime> openTimeList;
-        List<Menu> menuList;
-        int openTimeType;
-        String tel;
-        String zoneCode;
+        private int restaurantId;
+        private String name;
+        private int categoryId;
+        private double lat;
+        private double lng;
+        private List<OpenTime> openTimeList;
+        private List<Menu> menuList;
+        private List<File> menuImageList;
+        private int openTimeType;
+        private String tel;
+        private String zipCode;
+        private String address;
         int writerId;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -38,7 +42,9 @@ public class Restaurant {
                     .lng(lng)
                     .openTimeList(openTimeList)
                     .menuList(menuList)
+                    .menuImageList(menuImageList)
                     .openTimeType(openTimeType)
+                    .address(address)
                     .tel(tel)
                     .build();
 
@@ -52,17 +58,19 @@ public class Restaurant {
     @AllArgsConstructor
     @Builder
     public static class DomainRequest {
-        int restaurantId;
-        String name;
-        int categoryId;
-        double lat;
-        double lng;
-        List<OpenTime> openTimeList;
-        List<Menu> menuList;
-        int openTimeType;
-        String tel;
-        String zoneCode;
-        int writerId;
+        private int restaurantId;
+        private String name;
+        private int categoryId;
+        private double lat;
+        private double lng;
+        private String zipCode;
+        private List<OpenTime> openTimeList;
+        private List<Menu> menuList;
+        private List<File> menuImageList;
+        private int openTimeType;
+        private String tel;
+        private String address;
+        private int writerId;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
 
@@ -75,10 +83,12 @@ public class Restaurant {
                     .lng(lng)
                     .openTimeList(openTimeList)
                     .menuList(menuList)
+                    .menuImageList(menuImageList)
                     .openTimeType(openTimeType)
                     .tel(tel)
+                    .zipCode(zipCode)
+                    .address(address)
                     .writerId(writerId)
-                    .zoneCode(zoneCode)
                     .createdAt(createdAt)
                     .updatedAt(updatedAt)
                     .build();
@@ -92,15 +102,17 @@ public class Restaurant {
     @AllArgsConstructor
     @Builder
     public static class DomainResponse {
-        int restaurantId;
-        String name;
-        int categoryId;
-        double lat;
-        double lng;
-        List<OpenTime> openTimeList;
-        List<Menu> menuList;
-        int openTimeType;
-        String tel;
+        private int restaurantId;
+        private String name;
+        private int categoryId;
+        private double lat;
+        private double lng;
+        private List<OpenTime> openTimeList;
+        private List<Menu> menuList;
+        private List<File> menuImageList;
+        private String address;
+        private int openTimeType;
+        private String tel;
 
         public Domain toDomain() {
             return Domain.builder()
@@ -111,6 +123,8 @@ public class Restaurant {
                     .lng(lng)
                     .openTimeList(openTimeList)
                     .openTimeType(openTimeType)
+                    .menuImageList(menuImageList)
+                    .address(address)
                     .tel(tel)
                     .build();
         }
@@ -119,19 +133,22 @@ public class Restaurant {
     @Getter
     @Setter
     public static class OpenTime {
-        int restaurantId;
-        int openTimeType;
-        int day;
-        Time startTime;
-        Time endTime;
+        private int restaurantId;
+        private int openTimeType;
+        private int day;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+        private LocalTime startTime;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+        private LocalTime endTime;
     }
 
     @Getter
     @Setter
     public static class Menu {
-        int restaurantId;
-        String name;
-        int price;
+        private int restaurantId;
+        private int seq;
+        private String name;
+        private int price;
     }
 
     @Getter

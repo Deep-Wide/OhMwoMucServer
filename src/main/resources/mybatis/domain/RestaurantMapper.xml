@@ -66,11 +66,14 @@
         LEFT OUTER JOIN RESTAURANT_FILE_MAPPING rf ON r.restaurant_id = rf.restaurant_id
         LEFT OUTER JOIN FILE f ON rf.file_id = f.file_id
         WHERE 1=1
-
+        <![CDATA[
+          AND (#{southest} < r.lat AND r.lat < #{northest})
+          AND (#{westest} < r.lng AND r.lng < #{eastest})
+        ]]>
         <if test="searchKeyword != null">
             AND r.name LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
-
+        GROUP BY r.restaurant_id
         ORDER BY r.create_at DESC
     </select>
 

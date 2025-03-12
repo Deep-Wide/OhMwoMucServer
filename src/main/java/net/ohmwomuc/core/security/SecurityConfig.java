@@ -9,6 +9,7 @@ import net.ohmwomuc.core.security.service.JwtService;
 import net.ohmwomuc.core.security.service.SecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -45,9 +46,9 @@ public class SecurityConfig {
             "/api/likes/**",
             "/api/files/**",
             "/api/users/**",
-            "/api/report/title",
-            "/api/restaurant/*/images",
-            "/api/restaurant/*",
+//            "/api/report/title",
+//            "/api/restaurant/*/images",
+            "/api/restaurant/**",
             "/api/oauth2/**",
             "/swagger-ui/**",
             "/v3/api-docs/**"
@@ -59,7 +60,7 @@ public class SecurityConfig {
                                            JwtVerifyFilter jwtVerifyFilter,
                                            CustomOauth2SuccessHandler customOauth2SuccessHandler
     ) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(allowedRequestUrlList.toArray(String[]::new))
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, allowedRequestUrlList.toArray(String[]::new))
                         .permitAll()
                         .anyRequest()
                         .authenticated())

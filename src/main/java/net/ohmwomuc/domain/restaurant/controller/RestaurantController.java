@@ -25,10 +25,10 @@ public class RestaurantController {
     @GetMapping("")
     @Operation(summary = "Restaurant 목록 조회")
     public ResponseEntity<List<Restaurant.DomainResponse>> getRestaurantList(@RequestParam(name = "searchKeyword", required = false) String searchKeyword,
-                                                                             @RequestParam(name = "westest", required = true) double westest,
-                                                                             @RequestParam(name = "northest", required = true) double northest,
-                                                                             @RequestParam(name = "southest", required = true) double southest,
-                                                                             @RequestParam(name = "eastest", required = true) double eastest
+                                                                             @RequestParam(name = "westest") double westest,
+                                                                             @RequestParam(name = "northest") double northest,
+                                                                             @RequestParam(name = "southest") double southest,
+                                                                             @RequestParam(name = "eastest") double eastest
     ) {
         Restaurant.Condition condition = Restaurant.Condition.builder()
                 .searchKeyword(searchKeyword)

@@ -70,10 +70,9 @@
           AND (#{southest} < r.lat AND r.lat < #{northest})
           AND (#{westest} < r.lng AND r.lng < #{eastest})
         ]]>
-        <if test="searchKeyword != null">
+        <if test="searchKeyword != null and searchKeyword != ''">
             AND r.name LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
-        GROUP BY r.restaurant_id
         ORDER BY r.create_at DESC
     </select>
 

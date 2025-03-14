@@ -31,6 +31,7 @@ public class Restaurant {
         int writerId;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+        private int tasteCode;
 
         public DomainResponse toResponse() {
             return DomainResponse
@@ -46,6 +47,7 @@ public class Restaurant {
                     .openTimeType(openTimeType)
                     .address(address)
                     .tel(tel)
+                    .tasteCode(tasteCode)
                     .build();
 
         }
@@ -113,6 +115,7 @@ public class Restaurant {
         private String address;
         private int openTimeType;
         private String tel;
+        private int tasteCode;
 
         public Domain toDomain() {
             return Domain.builder()
@@ -126,6 +129,7 @@ public class Restaurant {
                     .menuImageList(menuImageList)
                     .address(address)
                     .tel(tel)
+                    .tasteCode(tasteCode)
                     .build();
         }
     }

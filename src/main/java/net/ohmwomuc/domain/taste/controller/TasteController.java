@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "taste", description = "taste 컨트롤러")
 public class TasteController {
 
-    private SecurityService securityService;
-    private TasteService tasteService;
+    private final SecurityService securityService;
+    private final TasteService tasteService;
 
     @PostMapping("")
     public ResponseEntity<Void> addTaste(@RequestBody Taste.Request tasteInfo) {

@@ -13,7 +13,7 @@
     <insert id="addTaste" parameterType="net.ohmwomuc.domain.taste.dto.Taste$Domain">
         insert into TASTE
             (user_id, restaurant_id, taste_code)
-        VALUES (#{userId}, #{restaurant_id}, #{taste_code})
+        VALUES (#{userId}, #{restaurantId}, #{tasteCode})
     </insert>
 
     <delete id="deleteTaste" parameterType="net.ohmwomuc.domain.taste.dto.Taste$Domain">

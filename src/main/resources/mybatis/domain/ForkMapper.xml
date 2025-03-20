@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.ohmwomuc.domain.forks.repository.ForkMapper">
+    <select id="getFork" parameterType="net.ohmwomuc.domain.forks.dto.Fork"
+            resultType="net.ohmwomuc.domain.forks.dto.Fork">
+        SELECT
+            *
+        FROM FORKS
+        WHERE restaurant_id = #{restaurantId}
+          AND user_id = #{userId}
+    </select>
+
+    <insert id="addFork" parameterType="net.ohmwomuc.domain.forks.dto.Fork">
+        insert into FORKS
+            (user_id, restaurant_id)
+        VALUES (#{userId}, #{restaurantId})
+    </insert>
+
+    <delete id="deleteFork" parameterType="net.ohmwomuc.domain.forks.dto.Fork">
+        DELETE
+        FROM FORKS
+        WHERE restaurant_id = #{restaurantId}
+          AND user_id = #{userId}
+    </delete>
+
+</mapper>

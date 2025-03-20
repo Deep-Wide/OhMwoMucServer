@@ -32,6 +32,8 @@ public class Restaurant {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private int tasteCode;
+        private Boolean isForked;
+        private int forkCount;
 
         public DomainResponse toResponse() {
             return DomainResponse
@@ -48,6 +50,8 @@ public class Restaurant {
                     .address(address)
                     .tel(tel)
                     .tasteCode(tasteCode)
+                    .isForked(isForked)
+                    .forkCount(forkCount)
                     .build();
 
         }
@@ -116,6 +120,8 @@ public class Restaurant {
         private int openTimeType;
         private String tel;
         private int tasteCode;
+        private Boolean isForked;
+        private int forkCount;
 
         public Domain toDomain() {
             return Domain.builder()
@@ -130,6 +136,8 @@ public class Restaurant {
                     .address(address)
                     .tel(tel)
                     .tasteCode(tasteCode)
+                    .isForked(isForked)
+                    .forkCount(forkCount)
                     .build();
         }
     }
@@ -179,6 +187,17 @@ public class Restaurant {
         private double eastest;
         private double westest;
         private double southest;
+        private Integer userId;
         private String searchKeyword;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class BasicCondition {
+       private Integer userId;
+       private int restaurantId;
     }
 }

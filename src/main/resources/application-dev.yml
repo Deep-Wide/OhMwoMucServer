@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    hikari:
+      driver-class-name: ENC(PmNwMSS3YUxPi0Ij9kE5PZjn5cbR1USdx3iyxN0QR4FcG3gHM52uhhT3gkkOo7dr)
+      jdbc-url: ENC(KigDdRTOWV8rJ81lnhk6oFRFR9Ysv4srMI2RB1+REKo1ml8IiX82n8gnK/JkupOFbQOyGEyXQvqF7yEl2oH9yw==)
+      username: ENC(wAcGLiLsuo+EKw9eiSAQXyAMkNhPWd/C)
+      password: ENC(rueZ1lidsn4ci3fo6g6WzeTPID1BuR6L6SXwIx/sVzc=)
+      maximum-pool-size: 5
+
+server:
+  log:
+    path: /app/ohmuamuc/server/logs
+
+files:
+  uploaded-path: /app/ohmuamuc/server/logs/uploadedFiles
+
+logging:
+  level:
+    root: info
+
+oauth2:
+  client-host: http://localhost:5173
+

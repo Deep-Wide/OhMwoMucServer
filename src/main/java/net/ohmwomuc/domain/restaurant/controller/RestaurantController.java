@@ -3,9 +3,11 @@ package net.ohmwomuc.domain.restaurant.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import net.ohmwomuc.core.security.dto.User;
 import net.ohmwomuc.core.security.service.SecurityService;
 import net.ohmwomuc.domain.restaurant.dto.Restaurant;
 import net.ohmwomuc.domain.restaurant.service.RestaurantService;
+import net.ohmwomuc.domain.user.dto.UserInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +38,9 @@ public class RestaurantController {
                 .northest(northest)
                 .eastest(eastest)
                 .southest(southest)
-                .build();
+                .userId(securityService.getLoginUser()
+                        .map(User.UserAccountInfo::getId)
+                        .orElse(null)).build();
 
         List<Restaurant.Domain> restaurantList = restaurantService.getRestaurantList(condition);
 
@@ -56,7 +60,10 @@ public class RestaurantController {
     @GetMapping("/{restaurantId}")
     @Operation(summary = "Restaurant 정보 조회")
     public ResponseEntity<Restaurant.DomainResponse> getRestaurantInfo(@PathVariable("restaurantId") Integer restaurantId) {
-        Restaurant.Domain restaurant = restaurantService.findRestaurantInfo(restaurantId);
+        Restaurant.BasicCondition basicCondition = Restaurant.BasicCondition.builder().userId(securityService.getLoginUser()
+                .map(User.UserAccountInfo::getId)
+                .orElse(null)).restaurantId(restaurantId).build();
+        Restaurant.Domain restaurant = restaurantService.findRestaurantInfo(basicCondition);
 
         return ResponseEntity.ok(restaurant.toResponse());
     }

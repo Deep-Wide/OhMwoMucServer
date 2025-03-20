@@ -28,7 +28,9 @@ public class Muamuc {
         private boolean isDel;
         private int commentCount;
         private int likeCount;
+        private int forkCount;
         private boolean isLiked;
+        private boolean isForked;
 
         public void setTagId(int tagId) {
             this.muamucTag = MuamucTag.getById(tagId).get();
@@ -52,6 +54,8 @@ public class Muamuc {
                     .commentCount(commentCount)
                     .likeCount(likeCount)
                     .isLiked(isLiked)
+                    .isForked(isForked)
+                    .forkCount(forkCount)
                     .build();
 
         }
@@ -88,6 +92,10 @@ public class Muamuc {
         private int likeCount;
         @Schema(description = "좋아요 여부")
         private boolean isLiked;
+        @Schema(description = "찜하기 개수")
+        private int forkCount;
+        @Schema(description = "찜하기 여부")
+        private boolean isForked;
 
     }
 
@@ -122,7 +130,7 @@ public class Muamuc {
         }
 
         public Domain toDomain() {
-            return Muamuc.Domain.builder()
+            return Domain.builder()
                     .muamucId(muamucId)
                     .muamucTag(muamucTag)
                     .title(title)

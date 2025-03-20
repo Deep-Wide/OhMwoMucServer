@@ -46,7 +46,7 @@ public class SecurityConfig {
             "/api/likes/**",
             "/api/files/**",
             "/api/users/**",
-//            "/api/report/title",
+            "/api/report/title",
 //            "/api/restaurant/*/images",
             "/api/restaurant/**",
             "/api/oauth2/**",
@@ -106,7 +106,7 @@ public class SecurityConfig {
 
             configuration.setAllowedHeaders(Collections.singletonList("*"));
             configuration.setAllowedMethods(Collections.singletonList("*"));
-            configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+            configuration.setAllowedOrigins((List.of("http://localhost:5173", "http://ohmuamuc.net", "https://ohmuamuc.net")));
             configuration.setAllowCredentials(true);
             configuration.setExposedHeaders(List.of("atk"));
 

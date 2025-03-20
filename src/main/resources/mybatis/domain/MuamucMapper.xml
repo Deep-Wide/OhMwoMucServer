@@ -6,14 +6,10 @@
         SELECT muamuc.*,
         COALESCE(u.nickname, '탈퇴된 사용자') AS writerName,
         COALESCE(comment_count, 0) AS comment_count,
-        COALESCE(like_count, 0) AS like_count
-        <if test="userId != 0">
-            ,
-            CASE
-            WHEN l.user_id is not null then true
-            ELSE false
-            END AS isLiked
-        </if>
+        COALESCE(like_count, 0) AS like_count,
+        COALESCE(fork_count, 0) AS fork_count,
+        l.user_id is not null AS isLiked,
+        f.restaurant_id is not null AS isForked
         FROM MUAMUC muamuc
 
         LEFT OUTER JOIN USER u ON muamuc.writer_id = u.id
@@ -33,13 +29,25 @@
         GROUP BY muamuc_id
         ) AS L ON muamuc.muamuc_id = L.muamuc_id
 
-        <if test="userId != 0">
-            LEFT OUTER JOIN
-            (select user_id,
-            muamuc_id
-            from LIKES
-            WHERE user_id = #{userId}) AS l on muamuc.muamuc_id = l.muamuc_id
-        </if>
+        LEFT OUTER JOIN (
+        SELECT COUNT(restaurant_id) AS fork_count,
+        restaurant_id
+        FROM FORKS fr
+        GROUP BY restaurant_id
+        ) AS fr ON muamuc.restaurant_id = fr.restaurant_id
+
+        LEFT OUTER JOIN
+        (select user_id,
+        muamuc_id
+        from LIKES
+        WHERE user_id = #{userId}) AS l on muamuc.muamuc_id = l.muamuc_id
+
+        LEFT OUTER JOIN
+        (select user_id,
+        restaurant_id
+        from FORKS
+        WHERE user_id = #{userId}) AS f on muamuc.restaurant_id = f.restaurant_id
+
         WHERE muamuc.tag_id = #{id}
         AND muamuc.is_del = 0
         <if test="searchKeyword != null and searchKeyword != ''">
@@ -62,19 +70,35 @@
         SELECT muamuc.*,
                coalesce(nickname, '탈퇴된 사용자') AS writerName,
                COALESCE(like_count, 0)       AS like_count,
+               COALESCE(fork_count, 0)      AS fork_count,
                CASE
                    WHEN l.user_id is not null then true
                    ELSE false
-                   END                       AS isLiked
+                   END                       AS isLiked,
+               CASE
+                   WHEN frs.restaurant_id is not null then true
+                   ELSE false
+                   END                       AS isForked
         FROM MUAMUC muamuc
                  LEFT OUTER JOIN USER u on writer_id = id
                  LEFT OUTER JOIN (SELECT COUNT(muamuc_id) AS like_count,
                                          muamuc_id
                                   FROM LIKES L
                                   GROUP BY muamuc_id) AS L ON muamuc.muamuc_id = L.muamuc_id
+
                  LEFT OUTER JOIN (SELECT muamuc_id, user_id
                                   FROM LIKES l
                                   where user_id = #{userId}) AS l on L.muamuc_id = l.muamuc_id
+
+                 LEFT OUTER JOIN (SELECT COUNT(*) AS fork_count,
+                                         restaurant_id
+                                  FROM FORKS
+                                  GROUP BY restaurant_id) AS fr ON muamuc.restaurant_id = fr.restaurant_id
+
+                 LEFT OUTER JOIN (SELECT restaurant_id, user_id
+                                  FROM FORKS
+                                  WHERE user_id = #{userId}) AS frs ON muamuc.restaurant_id = frs.restaurant_id
+
         where muamuc.muamuc_id = #{muamucId}
     </select>
 

@@ -48,13 +48,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (!restaurantInfo.getMenuImageList().isEmpty()) {
             restaurantRepository.addRestaurantImages(restaurantInfo.getMenuImageList());
         }
+        Restaurant.BasicCondition basicCondition = Restaurant.BasicCondition.builder().restaurantId(restaurantInfo.getRestaurantId()).build();
 
-        return restaurantRepository.getRestaurantInfo(restaurantInfo.getRestaurantId());
+        return restaurantRepository.getRestaurantInfo(basicCondition);
     }
 
     @Override
-    public Restaurant.Domain findRestaurantInfo(Integer restaurantId) {
-        return restaurantRepository.getRestaurantInfo(restaurantId);
+    public Restaurant.Domain findRestaurantInfo(Restaurant.BasicCondition basicCondition) {
+        return restaurantRepository.getRestaurantInfo(basicCondition);
     }
 
 

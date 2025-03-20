@@ -14,7 +14,7 @@ public interface RestaurantRepository {
 
     void addRestaurantMenu(List<Restaurant.Menu> menuList);
 
-    Restaurant.Domain getRestaurantInfo(int restaurantId);
+    Restaurant.Domain getRestaurantInfo(Restaurant.BasicCondition basicCondition);
 
     List<Restaurant.File> getRestaurantMenuImages(Integer restaurantId);
 

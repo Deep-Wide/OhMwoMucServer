@@ -8,7 +8,7 @@ public interface RestaurantService {
 
     Restaurant.Domain createRestaurant(Restaurant.Domain domain);
 
-    Restaurant.Domain findRestaurantInfo(Integer restaurantId);
+    Restaurant.Domain findRestaurantInfo(Restaurant.BasicCondition basicCondition);
 
     List<Restaurant.Domain> getRestaurantList(Restaurant.Condition condition);
 

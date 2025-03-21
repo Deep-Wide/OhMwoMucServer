@@ -62,6 +62,7 @@ public class SecurityConfig {
     ) throws Exception {
         http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, allowedRequestUrlList.toArray(String[]::new))
                         .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                         .anyRequest()
                         .authenticated())
                 .formLogin(formLogin -> formLogin.disable())

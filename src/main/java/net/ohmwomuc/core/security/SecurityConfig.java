@@ -107,7 +107,7 @@ public class SecurityConfig {
 
             configuration.setAllowedHeaders(Collections.singletonList("*"));
             configuration.setAllowedMethods(Collections.singletonList("*"));
-            configuration.setAllowedOrigins((List.of("http://localhost:5173", "http://ohmuamuc.net", "https://ohmuamuc.net")));
+            configuration.setAllowedOrigins((List.of("http://localhost:5173", "https://ohmuamuc.o-r.kr", "http://ohmuamuc.o-r.kr")));
             configuration.setAllowCredentials(true);
             configuration.setExposedHeaders(List.of("atk"));
 

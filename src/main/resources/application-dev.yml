@@ -19,5 +19,5 @@ logging:
     root: info
 
 oauth2:
-  client-host: http://localhost:5173
+  client-host: https://ohmuamuc.o-r.kr
 

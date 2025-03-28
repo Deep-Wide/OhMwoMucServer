@@ -68,7 +68,7 @@
         CASE
         WHEN uf.user_id IS NOT NULL THEN TRUE
         ELSE FALSE
-        END AS isForked
+        END AS is_forked
         FROM RESTAURANT r
         LEFT OUTER JOIN RESTAURANT_OPEN_TIME ot ON r.restaurant_id = ot.restaurant_id
         LEFT OUTER JOIN RESTAURANT_MENU m ON r.restaurant_id = m.restaurant_id

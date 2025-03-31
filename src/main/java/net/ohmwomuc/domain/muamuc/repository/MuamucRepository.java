@@ -22,4 +22,6 @@ public interface MuamucRepository {
     void addMuamucFiles(List<Muamuc.File> files);
 
     void clearMuamucFiles(Integer muamucId);
+
+    List<Muamuc.Domain> findMyMuamucList(Integer writerId);
 }

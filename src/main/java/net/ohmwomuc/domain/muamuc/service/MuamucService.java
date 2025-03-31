@@ -18,4 +18,6 @@ public interface MuamucService {
     List<Muamuc.File> getMuamucFileList(Integer muamucId);
 
     void addMuamucFiles(List<Muamuc.File> files, Integer muamucId);
+
+    List<Muamuc.Domain> getMyMuamucList(Integer writerId);
 }

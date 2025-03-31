@@ -19,4 +19,8 @@ public interface RestaurantRepository {
     List<Restaurant.File> getRestaurantMenuImages(Integer restaurantId);
 
     void addRestaurantImages(List<Restaurant.File> images);
+
+    List<Restaurant.Domain> getMyRestaurantList(Integer userId);
+
+    List<Restaurant.Domain> getYumRestaurantList(Integer userId);
 }

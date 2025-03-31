@@ -47,6 +47,25 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantList.stream().map(Restaurant.Domain::toResponse).toList());
     }
 
+    @GetMapping("/my")
+    @Operation(summary = "내가 찜한 Restaurant 목록 조회")
+    public ResponseEntity<List<Restaurant.DomainResponse>> getMyRestaurantList() {
+
+        Integer userId = securityService.getLoginUser().map(User.UserAccountInfo::getId).orElse(null);
+
+        List<Restaurant.Domain> restaurantList = restaurantService.getMyRestaurantList(userId);
+        return ResponseEntity.ok(restaurantList.stream().map(Restaurant.Domain::toResponse).toList());
+    }
+
+    @GetMapping("/yum")
+    @Operation(summary = "내가 맛있엇던 Restaurant 목록 조회")
+    public ResponseEntity<List<Restaurant.DomainResponse>> getYumRestaurantList() {
+
+        Integer userId = securityService.getLoginUser().map(User.UserAccountInfo::getId).orElse(null);
+
+        List<Restaurant.Domain> restaurantList = restaurantService.getYumRestaurantList(userId);
+        return ResponseEntity.ok(restaurantList.stream().map(Restaurant.Domain::toResponse).toList());
+    }
 
     @PostMapping("")
     @Operation(summary = "Restaurant 추가")

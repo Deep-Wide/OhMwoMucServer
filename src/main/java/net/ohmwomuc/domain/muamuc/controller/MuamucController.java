@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import net.ohmwomuc.core.exception.CustomException;
 import net.ohmwomuc.core.exception.CustomExceptionCode;
+import net.ohmwomuc.core.security.dto.User;
 import net.ohmwomuc.core.security.service.SecurityService;
 import net.ohmwomuc.domain.muamuc.dto.Muamuc;
 import net.ohmwomuc.domain.muamuc.dto.MuamucTag;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -99,5 +101,22 @@ public class MuamucController {
     public ResponseEntity<Void> addMuamucFile(@RequestBody List<Muamuc.File> files, @PathVariable Integer muamucId) {
         muamucService.addMuamucFiles(files, muamucId);
         return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/my")
+    @Operation(summary = "내가 쓴 Muamuc 게시물 전체 리스트 조회")
+    public ResponseEntity<List<Muamuc.DomainResponse>> getMyMuamucList() {
+        Integer writerId = securityService.getLoginUser().map(User.UserAccountInfo::getId).orElse(null);
+
+        if (Objects.isNull(writerId)) {
+            throw new CustomException(CustomExceptionCode.USER_FORBIDDEN);
+        }
+
+        List<Muamuc.Domain> muamucList = muamucService.getMyMuamucList(writerId);
+
+        return ResponseEntity.ok(muamucList.stream()
+                .map(Muamuc.Domain::toResponse)
+                .collect(Collectors.toList()));
     }
 }

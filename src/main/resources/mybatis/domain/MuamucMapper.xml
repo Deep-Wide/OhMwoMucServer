@@ -140,4 +140,12 @@
         WHERE muamuc_id = #{muamucId}
     </delete>
 
+    <select id="findMyMuamucList" parameterType="java.lang.Integer"
+            resultType="net.ohmwomuc.domain.muamuc.dto.Muamuc$Domain">
+        SELECT *
+        FROM MUAMUC
+        WHERE writer_id = #{writerId}
+        ORDER BY updated_at desc
+    </select>
+
 </mapper>

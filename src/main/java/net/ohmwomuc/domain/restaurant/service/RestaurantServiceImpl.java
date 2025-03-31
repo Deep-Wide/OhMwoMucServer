@@ -71,4 +71,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
+    @Override
+    public List<Restaurant.Domain> getMyRestaurantList(Integer userId) {
+        return restaurantRepository.getMyRestaurantList(userId);
+    }
+
+    @Override
+    public List<Restaurant.Domain> getYumRestaurantList(Integer userId) {
+        return restaurantRepository.getYumRestaurantList(userId);
+    }
+
 }

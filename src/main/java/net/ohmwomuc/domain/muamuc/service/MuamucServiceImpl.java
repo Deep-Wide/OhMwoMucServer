@@ -61,4 +61,9 @@ public class MuamucServiceImpl implements MuamucService {
             muamucRepository.addMuamucFiles(files);
         }
     }
+
+    @Override
+    public List<Muamuc.Domain> getMyMuamucList(Integer writerId) {
+        return muamucRepository.findMyMuamucList(writerId);
+    }
 }

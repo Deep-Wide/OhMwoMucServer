@@ -19,4 +19,6 @@ public interface RestaurantService {
     List<Restaurant.Domain> getMyRestaurantList(Integer userId);
 
     List<Restaurant.Domain> getYumRestaurantList(Integer userId);
+
+    List<Restaurant.Domain> getSearchResultwRestaurantList(String searchKeyword);
 }

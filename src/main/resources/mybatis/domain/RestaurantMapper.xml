@@ -41,6 +41,24 @@
         </collection>
     </resultMap>
 
+    <select id="getSearchResultwRestaurantList" resultMap="RestaurantResultMap"
+            parameterType="java.lang.String">
+        SELECT restaurant_id,
+        name,
+        category_id,
+        lat,
+        lng,
+        zip_code,
+        create_at,
+        update_at,
+        address
+        FROM RESTAURANT r
+        <if test="searchKeyword != null and searchKeyword != ''">
+            WHERE name LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        ORDER BY create_at DESC
+    </select>
+
     <select id="getRestaurantList" resultMap="RestaurantResultMap"
             parameterType="net.ohmwomuc.domain.restaurant.dto.Restaurant$Condition">
         SELECT r.restaurant_id,

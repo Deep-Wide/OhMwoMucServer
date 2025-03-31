@@ -23,4 +23,6 @@ public interface RestaurantRepository {
     List<Restaurant.Domain> getMyRestaurantList(Integer userId);
 
     List<Restaurant.Domain> getYumRestaurantList(Integer userId);
+
+    List<Restaurant.Domain> getSearchResultwRestaurantList(String SearchKeyword);
 }

@@ -47,6 +47,14 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantList.stream().map(Restaurant.Domain::toResponse).toList());
     }
 
+    @GetMapping("/search")
+    @Operation(summary = "Restaurant 검색 조회")
+    public ResponseEntity<List<Restaurant.DomainResponse>> getSearchResultwRestaurantList(@RequestParam(name = "searchKeyword") String searchKeyword) {
+        List<Restaurant.Domain> restaurantList = restaurantService.getSearchResultwRestaurantList(searchKeyword);
+
+        return ResponseEntity.ok(restaurantList.stream().map(Restaurant.Domain::toResponse).toList());
+    }
+
     @GetMapping("/my")
     @Operation(summary = "내가 찜한 Restaurant 목록 조회")
     public ResponseEntity<List<Restaurant.DomainResponse>> getMyRestaurantList() {

@@ -81,4 +81,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.getYumRestaurantList(userId);
     }
 
+    @Override
+    public List<Restaurant.Domain> getSearchResultwRestaurantList(String searchKeyword) {
+        return restaurantRepository.getSearchResultwRestaurantList(searchKeyword);
+    }
+
 }
